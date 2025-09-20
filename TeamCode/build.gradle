@@ -10,6 +10,7 @@
 
 
 // Custom definitions may go here
+apply plugin: 'org.jetbrains.kotlin.android'
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
@@ -21,8 +22,26 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
     implementation project(':FtcRobotController')
+
+    implementation 'com.pedropathing:ftc:2.0.1'
+    implementation 'com.pedropathing:telemetry:0.0.6'
+
+    implementation 'com.bylazar:fullpanels:1.0.2'
+
+    implementation 'dev.nextftc:ftc:1.0.0'
+    implementation 'dev.nextftc:hardware:1.0.0' // If you would like to use the hardware module
+    implementation 'dev.nextftc:bindings:1.0.1'
+    implementation 'dev.nextftc.extensions:pedro:1.0.0'
 }
