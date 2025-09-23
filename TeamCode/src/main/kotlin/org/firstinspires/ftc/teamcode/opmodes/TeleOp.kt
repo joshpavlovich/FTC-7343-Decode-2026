@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.guide.kotlin.opmodes
+package org.firstinspires.ftc.teamcode.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
