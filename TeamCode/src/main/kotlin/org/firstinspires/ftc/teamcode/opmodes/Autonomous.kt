@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.guide.kotlin.opmodes
+package org.firstinspires.ftc.teamcode.opmodes
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.nextftc.core.commands.Command
