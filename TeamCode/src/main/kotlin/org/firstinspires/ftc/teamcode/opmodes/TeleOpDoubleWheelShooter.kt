@@ -18,6 +18,6 @@ class TeleOpDoubleWheelShooter : NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.circle whenBecomesTrue DoubleWheelShooter.spin whenBecomesFalse DoubleWheelShooter.stopSpin
+        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue DoubleWheelShooter.spin whenBecomesFalse DoubleWheelShooter.stopSpin
     }
 }

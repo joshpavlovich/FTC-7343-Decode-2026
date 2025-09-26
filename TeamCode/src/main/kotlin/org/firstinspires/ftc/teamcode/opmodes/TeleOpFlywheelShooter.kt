@@ -18,6 +18,6 @@ class TeleOpFlywheelShooter : NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.circle whenBecomesTrue FlywheelShooter.spin whenBecomesFalse FlywheelShooter.stopSpin
+        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooter.spin whenBecomesFalse FlywheelShooter.stopSpin
     }
 }
