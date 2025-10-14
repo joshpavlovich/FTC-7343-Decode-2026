@@ -6,7 +6,7 @@ import dev.nextftc.hardware.powerable.SetPower
 
 object FlywheelShooter : Subsystem {
 
-    private val flyWheelMotor = MotorEx("flywheel_motor").reversed()
+    private val flyWheelMotor = MotorEx("flywheel_motor")
 
     val spin = SetPower(flyWheelMotor, 1.0)
         .requires(this)
