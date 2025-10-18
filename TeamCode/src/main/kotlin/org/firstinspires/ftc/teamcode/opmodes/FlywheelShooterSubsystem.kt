@@ -4,7 +4,7 @@ import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.powerable.SetPower
 
-object FlywheelShooter : Subsystem {
+object FlywheelShooterSubsystem : Subsystem {
 
     private val flyWheelMotor = MotorEx("flywheel_motor")
 

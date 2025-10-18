@@ -11,13 +11,13 @@ import dev.nextftc.ftc.components.BulkReadComponent
 class TeleOpFlywheelShooter : NextFTCOpMode() {
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooter),
+            SubsystemComponent(FlywheelShooterSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
     }
 
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooter.spin whenBecomesFalse FlywheelShooter.stopSpin
+        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin whenBecomesFalse FlywheelShooterSubsystem.stopSpin
     }
 }
