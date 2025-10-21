@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.subsystem
 
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.MotorEx
@@ -8,7 +8,7 @@ object FlywheelShooterSubsystem : Subsystem {
 
     private val flyWheelMotor = MotorEx("flywheel_motor")
 
-    val spin = SetPower(flyWheelMotor, 1.0)
+    fun spin(power: Double = 1.0) = SetPower(flyWheelMotor, power)
         .requires(this)
 
     val stopSpin = SetPower(flyWheelMotor, 0.0)

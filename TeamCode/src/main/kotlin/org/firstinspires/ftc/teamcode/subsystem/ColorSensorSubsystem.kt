@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.subsystem
 
 import android.graphics.Color
 import com.qualcomm.hardware.rev.RevColorSensorV3
@@ -10,9 +10,11 @@ object ColorSensorSubsystem : Subsystem {
 
     private lateinit var colorSensor: RevColorSensorV3
 
-    var distanceThreshold = 3 // CM
-
     private var hsv = FloatArray(3)
+
+    private val greenRange = 155.0..160.0
+
+    private val purpleRange = 180.0..240.0
 
     override fun initialize() {
         colorSensor = ActiveOpMode.hardwareMap.get(RevColorSensorV3::class.java, "color_sensor")
@@ -20,29 +22,27 @@ object ColorSensorSubsystem : Subsystem {
     }
 
     override fun periodic() {
-        val currentColorStatus = if (colorSensor.getDistance(DistanceUnit.CM) <= distanceThreshold) {
-            Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
+        Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
-            if (hsv[0] <= 160) {
-                ColorStatus.GREEN
-            } else {
-                ColorStatus.PURPLE
-            }
-        } else {
-            ColorStatus.EMPTY
+        val hue = hsv[0]
+        val currentColorStatus = when (hue) {
+            in greenRange -> ColorStatus.GREEN
+            in purpleRange -> ColorStatus.PURPLE
+            else -> ColorStatus.UNKNOWN
         }
 
-        ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
         ActiveOpMode.telemetry.addData(
             "Raw distance sensor",
             colorSensor.getDistance(DistanceUnit.CM)
         )
-        ActiveOpMode.telemetry.addData("Raw hsv hue", hsv[0])
+        ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
+        ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
+        ActiveOpMode.telemetry.update()
     }
 
     enum class ColorStatus {
-        EMPTY,
         GREEN,
-        PURPLE
+        PURPLE,
+        UNKNOWN
     }
 }
