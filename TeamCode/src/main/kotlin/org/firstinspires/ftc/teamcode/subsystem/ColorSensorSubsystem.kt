@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
 import android.graphics.Color
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
@@ -9,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 object ColorSensorSubsystem : Subsystem {
 
     private lateinit var colorSensor: RevColorSensorV3
-
+    private lateinit var blinkinLedDriver: RevBlinkinLedDriver
     private var hsv = FloatArray(3)
 
     private val greenRange = 155.0..160.0
@@ -18,6 +20,7 @@ object ColorSensorSubsystem : Subsystem {
 
     override fun initialize() {
         colorSensor = ActiveOpMode.hardwareMap.get(RevColorSensorV3::class.java, "color_sensor")
+        blinkinLedDriver = ActiveOpMode.hardwareMap.get(RevBlinkinLedDriver::class.java, "blinkin")
         colorSensor.enableLed(true)
     }
 
@@ -25,11 +28,18 @@ object ColorSensorSubsystem : Subsystem {
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
         val hue = hsv[0]
-        val currentColorStatus = when (hue) {
+        val currentColorStatus: ColorStatus = when (hue) {
             in greenRange -> ColorStatus.GREEN
             in purpleRange -> ColorStatus.PURPLE
             else -> ColorStatus.UNKNOWN
         }
+        val pattern: BlinkinPattern = when (currentColorStatus) {
+            ColorStatus.GREEN -> BlinkinPattern.GREEN
+            ColorStatus.PURPLE -> BlinkinPattern.VIOLET
+            ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+        }
+
+        blinkinLedDriver.setPattern(pattern)
 
         ActiveOpMode.telemetry.addData(
             "Raw distance sensor",
