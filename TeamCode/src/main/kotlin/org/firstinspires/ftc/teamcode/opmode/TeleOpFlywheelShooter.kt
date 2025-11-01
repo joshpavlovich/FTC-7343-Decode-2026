@@ -19,9 +19,9 @@ class TeleOpFlywheelShooter : NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin() whenBecomesFalse FlywheelShooterSubsystem.stopSpin
+        Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.80) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
         Gamepads.gamepad1.triangle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.75) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
-        Gamepads.gamepad1.square.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.50) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
-        Gamepads.gamepad1.x.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.25) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
+        Gamepads.gamepad1.square.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.65) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
+        Gamepads.gamepad1.cross.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.60) whenBecomesFalse FlywheelShooterSubsystem.stopSpin
     }
 }
