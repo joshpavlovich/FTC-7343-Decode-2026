@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
+import com.qualcomm.robotcore.hardware.DcMotor
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.powerable.SetPower
@@ -7,6 +8,10 @@ import dev.nextftc.hardware.powerable.SetPower
 object FlywheelShooterSubsystem : Subsystem {
 
     private val flyWheelMotor = MotorEx("flywheel_motor").reversed()
+
+    override fun initialize() {
+        flyWheelMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+    }
 
     fun spin(power: Double = 1.0) = SetPower(flyWheelMotor, power)
         .requires(this)
