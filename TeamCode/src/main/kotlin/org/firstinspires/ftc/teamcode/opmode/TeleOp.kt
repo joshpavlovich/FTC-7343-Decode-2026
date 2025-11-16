@@ -19,10 +19,10 @@ class TeleOp : NextFTCOpMode() {
     }
 
     // change the names and directions to suit your robot
-    private val frontLeftMotor = MotorEx("front_left_motor")
-    private val frontRightMotor = MotorEx("front_right_motor").reversed()
-    private val backLeftMotor = MotorEx("back_left_motor")
-    private val backRightMotor = MotorEx("back_right_motor").reversed()
+    private val frontLeftMotor = MotorEx("front_left_motor").brakeMode()
+    private val frontRightMotor = MotorEx("front_right_motor").brakeMode().reversed()
+    private val backLeftMotor = MotorEx("back_left_motor").brakeMode()
+    private val backRightMotor = MotorEx("back_right_motor").brakeMode().reversed()
 
     override fun onStartButtonPressed() {
         val driverControlled = MecanumDriverControlled(

@@ -7,8 +7,8 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 
-@TeleOp(name = "Team Sapphire: TeleOp Color Sensor")
-class TeleOpColorSensor : NextFTCOpMode() {
+@TeleOp(name = "Team Sapphire: TeleOp Color Sensor Tester")
+class TeleOpColorSensorTester : NextFTCOpMode() {
     init {
         addComponents(
             SubsystemComponent(ColorSensorSubsystem),
