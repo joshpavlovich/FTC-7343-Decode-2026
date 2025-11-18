@@ -20,7 +20,7 @@ class TeleOpIntakeTester : NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
-        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse  whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
     }
 }

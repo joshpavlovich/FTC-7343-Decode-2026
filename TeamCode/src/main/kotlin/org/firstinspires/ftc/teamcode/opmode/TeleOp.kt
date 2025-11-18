@@ -2,17 +2,19 @@ package org.firstinspires.ftc.teamcode.opmode
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
+import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.hardware.driving.MecanumDriverControlled
 import dev.nextftc.hardware.impl.MotorEx
+import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 @TeleOp(name = "Team Sapphire: TeleOp")
 class TeleOp : NextFTCOpMode() {
     init {
         addComponents(
-//            SubsystemComponent(Lift, Claw),
+            SubsystemComponent(IntakeSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
@@ -35,6 +37,9 @@ class TeleOp : NextFTCOpMode() {
             turnPower = -Gamepads.gamepad1.rightStickX
         )
         driverControlled()
+
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
 //        Gamepads.gamepad2.dpadUp whenBecomesTrue Lift.toHigh whenBecomesFalse Claw.open
 //
