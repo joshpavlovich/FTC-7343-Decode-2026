@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -16,7 +18,10 @@ public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(6.350) // Mass is in kilograms...Remember to convert lbs to kg (Pounds × 0.45359237)!
             .forwardZeroPowerAcceleration(-34.218)
-            .lateralZeroPowerAcceleration(-58.600);
+            .lateralZeroPowerAcceleration(-58.600)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.02, .02))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0, 0.04, .025))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015,0, 0.0000075, 0.6, 0.01));
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -31,7 +36,7 @@ public class Constants {
             .xVelocity(60.454169806533)
             .yVelocity(43.323684812531);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, .75, 0);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-4.5)
@@ -40,9 +45,11 @@ public class Constants {
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
+        followerConstants.setCentripetalScaling(0.0015);
+
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
