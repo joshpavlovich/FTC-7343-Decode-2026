@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode
+package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
