@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 
-@TeleOp(name = "Team Sapphire: PedroTeleOp")
+@TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
     init {
         addComponents(

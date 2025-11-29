@@ -8,7 +8,7 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
-@TeleOp(name = "Team Sapphire: TeleOp Intake Tester")
+@TeleOp(name = "TeleOp Intake Tester")
 class TeleOpIntakeTester : NextFTCOpMode() {
     init {
         addComponents(

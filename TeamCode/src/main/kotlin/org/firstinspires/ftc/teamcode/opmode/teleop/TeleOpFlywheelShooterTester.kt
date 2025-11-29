@@ -8,7 +8,7 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
-@TeleOp(name = "Team Sapphire: TeleOp Flywheel Shooter Tester")
+@TeleOp(name = "TeleOp Flywheel Shooter Tester")
 class TeleOpFlywheelShooterTester : NextFTCOpMode() {
     init {
         addComponents(
