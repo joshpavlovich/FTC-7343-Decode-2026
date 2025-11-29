@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
-
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
     init {

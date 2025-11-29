@@ -5,6 +5,7 @@ import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.CRServoEx
 import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.powerable.SetPower
+import org.firstinspires.ftc.robotcore.external.Telemetry
 
 object FlywheelShooterSubsystem : Subsystem {
 
@@ -37,4 +38,9 @@ object FlywheelShooterSubsystem : Subsystem {
         SetPower(transferServoTopLeft, 0.0).requires(this),
         SetPower(transferServoTopRight, 0.0).requires(this)
     )
+
+    fun Telemetry.addShooterDetails() {
+        addData("Flywheel Motor Power", flyWheelMotor.power)
+        addData("Flywheel Motor Velocity", flyWheelMotor.velocity)
+    }
 }
