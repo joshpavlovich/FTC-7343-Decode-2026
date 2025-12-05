@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    private val flyWheelMotor by lazy { MotorEx("flywheel_motor").reversed() }
+    private val flyWheelMotor by lazy { MotorEx("flywheel_motor") }
 
     private val transferServoTopLeft by lazy { CRServoEx("transfer_servo_top_left") }
     private val transferServoBottomLeft by lazy { CRServoEx("transfer_servo_bottom_left") }
