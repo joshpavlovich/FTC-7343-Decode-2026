@@ -28,6 +28,7 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
     }
 
     override fun onStartButtonPressed() {
+        Gamepads.gamepad1.rightTrigger.atLeast(0.3) whenBecomesTrue FlywheelShooterSubsystem.kickArtifact() whenBecomesFalse FlywheelShooterSubsystem.resetKickerServo()
         Gamepads.gamepad1.triangle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.transfer() whenBecomesFalse FlywheelShooterSubsystem.stopTransfer()
         Gamepads.gamepad1.circle.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.80) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
         Gamepads.gamepad1.square.toggleOnBecomesTrue() whenBecomesTrue FlywheelShooterSubsystem.spin(.65) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
