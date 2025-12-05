@@ -9,7 +9,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    private val flyWheelMotor by lazy { MotorEx("flywheel_motor") }
+    private val flyWheelMotorLeft by lazy { MotorEx("flywheel_motor_left") }
+    private val flyWheelMotorRight by lazy { MotorEx("flywheel_motor_right") }
 
     private val transferServoTopLeft by lazy { CRServoEx("transfer_servo_top_left") }
     private val transferServoBottomLeft by lazy { CRServoEx("transfer_servo_bottom_left") }
@@ -17,14 +18,19 @@ object FlywheelShooterSubsystem : Subsystem {
     private val transferServoBottomRight by lazy { CRServoEx("transfer_servo_bottom_right") }
 
     override fun initialize() {
-        flyWheelMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        flyWheelMotorLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        flyWheelMotorRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
     // TODO: DO THE SERVOS NEED TO BE DELAYED, SO THAT THE FLYWHEEL CAN SPIN TO THE DESIRED VELOCITY
     // FIRST IF THEY ARE IN A PARALLEL GROUP? SEE, https://nextftc.dev/nextftc/commands/delays
-    fun spin(power: Double = 1.0) = SetPower(flyWheelMotor, power).requires(this)
+    fun spin(power: Double = 1.0) = SetPower(flyWheelMotorLeft, power).requires(this).and(
+        SetPower(flyWheelMotorRight, power).requires(this)
+    )
 
-    fun stopSpin() = SetPower(flyWheelMotor, 0.0).requires(this)
+    fun stopSpin() = SetPower(flyWheelMotorLeft, 0.0).requires(this).and(
+        SetPower(flyWheelMotorRight, 0.0).requires(this)
+    )
 
     // TODO: CHANGE MOTOR DIRECTION (-1.0 POWER TO REVERSE) ACCORDING TO LOCATION OF SERVO (RIGHT OR LEFT AND UP OR DOWN)
     fun transfer() = SetPower(transferServoBottomLeft, 1.0).requires(this).and(
@@ -40,7 +46,9 @@ object FlywheelShooterSubsystem : Subsystem {
     )
 
     fun Telemetry.addShooterDetails() {
-        addData("Flywheel Motor Power", flyWheelMotor.power)
-        addData("Flywheel Motor Velocity", flyWheelMotor.velocity)
+        addData("Flywheel Motor Left Power", flyWheelMotorLeft.power)
+        addData("Flywheel Motor Left Velocity", flyWheelMotorLeft.velocity)
+        addData("Flywheel Motor Right Power", flyWheelMotorRight.power)
+        addData("Flywheel Motor Right Velocity", flyWheelMotorRight.velocity)
     }
 }
