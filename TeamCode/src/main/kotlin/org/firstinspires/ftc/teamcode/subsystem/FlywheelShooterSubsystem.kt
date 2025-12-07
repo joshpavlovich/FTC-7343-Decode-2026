@@ -32,7 +32,7 @@ object FlywheelShooterSubsystem : Subsystem {
         flyWheelMotorRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         // TODO: INITIALIZE KICKER SERVO POSITION??? 0.0 or the kicker servo's down position???
-//        kickerServo.position = KICKER_SERVO_DOWN_POSITION
+        kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }
 
     fun kickArtifact() = InstantCommand {
