@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
-@Autonomous(name = "Red Leave Auto", group = "Red Alliance")
+@Autonomous(name = "Red Leave Auto", group = "Red Alliance", preselectTeleOp = "Pedro TeleOp")
 class RedLeaveAuto : NextFTCOpMode() {
 
     init {
