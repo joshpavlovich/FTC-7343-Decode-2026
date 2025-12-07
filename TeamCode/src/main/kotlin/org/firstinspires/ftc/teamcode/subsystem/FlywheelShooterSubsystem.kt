@@ -10,7 +10,7 @@ import dev.nextftc.hardware.powerable.SetPower
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
-private const val KICKER_SERVO_UP_POSITION = 0.25
+private const val KICKER_SERVO_UP_POSITION = 0.35
 
 object FlywheelShooterSubsystem : Subsystem {
 
@@ -28,10 +28,8 @@ object FlywheelShooterSubsystem : Subsystem {
         flyWheelMotorLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         flyWheelMotorRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
-        // TODO: INITIALIZE KICKER SERVO DIRECTION AND POSITION???
-//        kickerServo.servo.direction = Servo.Direction.REVERSE
         // TODO: INITIALIZE KICKER SERVO POSITION??? 0.0 or the kicker servo's down position???
-//        kickerServo.position = KICKER_SERVO_DOWN_POSITION
+        kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }
 
     fun kickArtifact() = InstantCommand {
