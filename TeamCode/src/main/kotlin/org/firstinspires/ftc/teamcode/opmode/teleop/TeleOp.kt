@@ -1,16 +1,25 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
+import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.hardware.driving.MecanumDriverControlled
 import dev.nextftc.hardware.impl.MotorEx
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
-@TeleOp(name = "Team Sapphire: TeleOp")
+private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
+
+@Disabled
+@TeleOp(name = "Manual TeleOp")
 class TeleOp : NextFTCOpMode() {
     init {
         addComponents(
@@ -41,13 +50,19 @@ class TeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
-//        Gamepads.gamepad2.dpadUp whenBecomesTrue Lift.toHigh whenBecomesFalse Claw.open
-//
-//        (Gamepads.gamepad2.rightTrigger greaterThan 0.2)
-//            .whenBecomesTrue(
-//                Claw.close.then(Lift.toHigh)
-//            )
-//
-//        Gamepads.gamepad2.leftBumper whenBecomesTrue Claw.open.and(Lift.toLow)
+        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
+            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
+        Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE)
+        ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
+        Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE)
+        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
+    }
+
+    override fun onUpdate() {
+        ActiveOpMode.telemetry.addShooterDetails()
+        ActiveOpMode.telemetry.update()
     }
 }
