@@ -48,7 +48,7 @@ class PedroTeleOp : NextFTCOpMode() {
             drivePower = -Gamepads.gamepad1.leftStickY,
             strafePower = -Gamepads.gamepad1.leftStickX,
             turnPower = -Gamepads.gamepad1.rightStickX,
-            robotCentric = false // TODO: WE NEED TO TEST FIELD CENTRIC VS ROBOT CENTRIC, SEE https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
+            robotCentric = true // TODO: WE NEED TO TEST FIELD CENTRIC VS ROBOT CENTRIC, SEE https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
         )
         driverControlled()
 
