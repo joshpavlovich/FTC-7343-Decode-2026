@@ -9,8 +9,8 @@ import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.powerable.SetPower
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
-const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.65
-const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.80
+const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.50
+const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.60
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
 private const val KICKER_SERVO_UP_POSITION = 0.35
