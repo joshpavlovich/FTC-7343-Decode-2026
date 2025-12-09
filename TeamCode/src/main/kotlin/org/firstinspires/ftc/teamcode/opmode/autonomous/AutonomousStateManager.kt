@@ -6,6 +6,6 @@ object AutonomousStateManager {
 
     var isRedAlliance: Boolean = false
 
-    var startPoseAtEndOfAuto: Pose = PathManager.farLaunchZoneStartPose
+    var startPoseAtEndOfAuto: Pose = PathManager.frontLaunchZoneStartPose
 
 }

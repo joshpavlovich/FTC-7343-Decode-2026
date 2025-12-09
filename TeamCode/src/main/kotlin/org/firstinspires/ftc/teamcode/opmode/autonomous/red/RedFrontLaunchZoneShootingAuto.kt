@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.autonomous.red
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.util.RobotLog
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.extensions.pedro.PedroComponent
 import dev.nextftc.ftc.ActiveOpMode
@@ -14,14 +13,18 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
-@Autonomous(name = "Red Leave Auto", group = "Red Alliance", preselectTeleOp = "Pedro TeleOp")
-class RedLeaveAuto : NextFTCOpMode() {
+@Autonomous(
+    name = "Red Front LaunchZone Shooting Auto",
+    group = "Red Alliance",
+    preselectTeleOp = "Pedro TeleOp"
+)
+class RedFrontLaunchZoneShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
@@ -33,13 +36,13 @@ class RedLeaveAuto : NextFTCOpMode() {
 
     override fun onInit() {
         PathManager.buildPaths(PedroComponent.follower)
-        PedroComponent.follower.setStartingPose(PathManager.farLaunchZoneStartPose.mirror())
+        PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStartPose.mirror())
 
         Drawing.init()
     }
 
     override fun onStartButtonPressed() {
-        AutonomousRoutines.farParkAutoRoutine()
+        AutonomousRoutines.frontLaunchShootingAutoRoutine()
     }
 
     override fun onStop() {
@@ -52,8 +55,6 @@ class RedLeaveAuto : NextFTCOpMode() {
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
-
-        RobotLog.d("Motor Voltage: Drivetrain: " + PedroComponent.follower.drivetrain.voltage.toString())
 
         ActiveOpMode.telemetry.update()
     }
