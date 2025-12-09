@@ -58,10 +58,10 @@ class PedroTeleOp : NextFTCOpMode() {
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.shortShot
         ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.superLongShot
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
 
         // TODO: ADD PARK POSE AND COMMAND FOR END GAME

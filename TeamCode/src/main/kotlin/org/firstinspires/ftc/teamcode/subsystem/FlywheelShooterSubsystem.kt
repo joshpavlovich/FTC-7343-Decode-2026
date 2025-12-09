@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
 import com.qualcomm.robotcore.hardware.DcMotor
+import dev.nextftc.control.ControlSystem
+import dev.nextftc.control.KineticState
+import dev.nextftc.control.feedback.PIDCoefficients
+import dev.nextftc.control.feedforward.BasicFeedforwardParameters
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.hardware.impl.CRServoEx
@@ -17,8 +21,40 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 object FlywheelShooterSubsystem : Subsystem {
 
+    var targetVelocity: Double = 1700.0
+
+    var kP: Double = 0.001
+    var kI: Double = 0.00000000001
+    var kD: Double = 0.001
+    var kV: Double = 0.0004
+    var kA: Double = 0.0
+    var kS: Double = 0.0
+
+    var kP2: Double = 0.001
+    var kI2: Double = 0.00000000001
+    var kD2: Double = 0.001
+    var kV2: Double = 0.00042
+    var kA2: Double = 0.0
+    var kS2: Double = 0.0
+
+    val pid: PIDCoefficients = PIDCoefficients(kP, kI, kD)
+    val ff: BasicFeedforwardParameters = BasicFeedforwardParameters(kV, kA, kS)
+
+    val pid2: PIDCoefficients = PIDCoefficients(kP2, kI2, kD2)
+    val ff2: BasicFeedforwardParameters = BasicFeedforwardParameters(kV2, kA2, kS2)
+
+    private val controllerRight: ControlSystem = ControlSystem.builder()
+        .velPid(pid)
+        .basicFF(ff)
+        .build()
+
+    private val controllerLeft: ControlSystem = ControlSystem.builder()
+        .velPid(pid2)
+        .basicFF(ff2)
+        .build()
+
     private val flyWheelMotorLeft by lazy { MotorEx("flywheel_motor_left") }
-    private val flyWheelMotorRight by lazy { MotorEx("flywheel_motor_right").reversed() }
+    private val flyWheelMotorRight by lazy { MotorEx("flywheel_motor_right") }
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
@@ -26,6 +62,14 @@ object FlywheelShooterSubsystem : Subsystem {
     private val transferServoBottomLeft by lazy { CRServoEx("transfer_servo_bottom_left") }
     private val transferServoTopRight by lazy { CRServoEx("transfer_servo_top_right") }
     private val transferServoBottomRight by lazy { CRServoEx("transfer_servo_bottom_right") }
+
+    val superLongShot = InstantCommand { setTargetVelocity(2300.0) }
+        .and(transfer().afterTime(1.5)).requires(this)
+    val longShot = InstantCommand { setTargetVelocity(1560.0) }
+        .and(transfer().afterTime(1.5)).requires(this)
+    val shortShot = InstantCommand { setTargetVelocity(1430.0) }
+        .and(transfer().afterTime(1.5)).requires(this)
+    val stop = InstantCommand { setTargetVelocity(0.0) }.requires(this)
 
     override fun initialize() {
         flyWheelMotorLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -78,5 +122,19 @@ object FlywheelShooterSubsystem : Subsystem {
         addData("Flywheel Motor Right Velocity", flyWheelMotorRight.velocity)
 
         addData("Kicker Servo Position", kickerServo.position)
+    }
+
+    override fun periodic() {
+        super.periodic()
+        flyWheelMotorLeft.power = controllerLeft.calculate(flyWheelMotorLeft.state)
+        flyWheelMotorRight.power = controllerRight.calculate(flyWheelMotorRight.state)
+    }
+
+    fun setTargetVelocity(velocity: Double) {
+        targetVelocity = velocity
+        // This is the correct way to set the target. The periodic() method
+        // will handle the rest.
+        controllerRight.goal = KineticState(0.0, targetVelocity, 0.0)
+        controllerLeft.goal = KineticState(0.0, -targetVelocity, 0.0)
     }
 }
