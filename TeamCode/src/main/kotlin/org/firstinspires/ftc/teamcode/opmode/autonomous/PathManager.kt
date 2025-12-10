@@ -35,6 +35,8 @@ object PathManager {
 
     lateinit var loadingZoneToFrontLaunchZoneShooting: PathChain
 
+    lateinit var frontLaunchZoneShootingToLoadingZone: PathChain
+
     lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain
 
     fun buildPaths(follower: Follower) {
@@ -72,6 +74,11 @@ object PathManager {
                 .setLinearHeadingInterpolation(loadingZoneParkPose.mirror().heading, frontLaunchZoneShootingPose.mirror().heading)
                 .build()
 
+            frontLaunchZoneShootingToLoadingZone = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneShootingPose.mirror(), loadingZoneParkPose.mirror()))
+                .setLinearHeadingInterpolation(frontLaunchZoneShootingPose.mirror().heading, loadingZoneParkPose.mirror().heading)
+                .build()
+            
             frontLaunchZoneShootingToFrontLaunchZoneLeavePark = follower.pathBuilder()
                 .addPath(BezierLine(frontLaunchZoneShootingPose.mirror(), frontLaunchZoneLeaveParkPose.mirror()))
                 .setLinearHeadingInterpolation(frontLaunchZoneShootingPose.mirror().heading, frontLaunchZoneLeaveParkPose.mirror().heading)
@@ -100,6 +107,11 @@ object PathManager {
             loadingZoneToFrontLaunchZoneShooting = follower.pathBuilder()
                 .addPath(BezierLine(loadingZoneParkPose, frontLaunchZoneShootingPose))
                 .setLinearHeadingInterpolation(loadingZoneParkPose.heading, frontLaunchZoneShootingPose.heading)
+                .build()
+
+            frontLaunchZoneShootingToLoadingZone = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneShootingPose, loadingZoneParkPose))
+                .setLinearHeadingInterpolation(frontLaunchZoneShootingPose.heading, loadingZoneParkPose.heading)
                 .build()
 
             frontLaunchZoneShootingToFrontLaunchZoneLeavePark = follower.pathBuilder()
