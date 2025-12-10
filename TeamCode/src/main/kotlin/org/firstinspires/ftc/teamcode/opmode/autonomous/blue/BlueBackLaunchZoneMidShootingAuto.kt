@@ -13,18 +13,18 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 @Autonomous(
-    name = "Blue Leave Auto",
+    name = "Blue Back LaunchZone Shooting Auto",
     group = "Blue Alliance",
     preselectTeleOp = "Pedro TeleOp"
 )
-class BlueFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
+class BlueBackLaunchZoneMidShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
@@ -36,13 +36,13 @@ class BlueFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
 
     override fun onInit() {
         PathManager.buildPaths(PedroComponent.follower)
-        PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStartPose)
+        PedroComponent.follower.setStartingPose(PathManager.backLaunchZoneStartPose)
 
         Drawing.init()
     }
 
     override fun onStartButtonPressed() {
-        AutonomousRoutines.frontLaunchZoneLeaveParkAutoRoutine()
+        AutonomousRoutines.backLaunchMidShootingAutoRoutine()
     }
 
     override fun onStop() {
