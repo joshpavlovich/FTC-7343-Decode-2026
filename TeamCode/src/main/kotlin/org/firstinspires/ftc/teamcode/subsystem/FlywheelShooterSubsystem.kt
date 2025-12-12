@@ -17,8 +17,8 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    private val flyWheelMotorLeft by lazy { MotorEx("flywheel_motor_left") }
-    private val flyWheelMotorRight by lazy { MotorEx("flywheel_motor_right").reversed() }
+    private val flyWheelMotorLeft = MotorEx("flywheel_motor_left")
+    private val flyWheelMotorRight = MotorEx("flywheel_motor_right").reversed()
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
