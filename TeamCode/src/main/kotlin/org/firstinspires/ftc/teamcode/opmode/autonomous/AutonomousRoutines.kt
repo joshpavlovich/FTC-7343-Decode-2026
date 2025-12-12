@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.autonomous
 
 import dev.nextftc.core.commands.delays.Delay
+import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.extensions.pedro.FollowPath
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
@@ -16,9 +17,11 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
-            FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
-            Delay(2.0),
+            ParallelGroup(
+                FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+                FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true)
+            ),
+            Delay(2.5),
             FlywheelShooterSubsystem.kickArtifact(),
             Delay(1.0),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -31,10 +34,12 @@ object AutonomousRoutines {
             // loaded into the robot than start flywheel motor leading into shooting
             FollowPath(PathManager.ppgSpikeMarkFromFrontToLoadingZonePark, true),
             Delay(3.0),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
-            // After done loading, move to the front launch zone and shoot
-            FollowPath(PathManager.loadingZoneToFrontLaunchZoneShooting, true),
-            Delay(1.5),
+            ParallelGroup(
+                FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+                // After done loading, move to the front launch zone and shoot
+                FollowPath(PathManager.loadingZoneToFrontLaunchZoneShooting, true)
+            ),
+            Delay(2.5),
             FlywheelShooterSubsystem.kickArtifact(),
             Delay(1.0),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -68,9 +73,11 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
-            FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
-            Delay(1.5),
+            ParallelGroup(
+                FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
+                FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true)
+            ),
+            Delay(2.5),
             FlywheelShooterSubsystem.kickArtifact(),
             Delay(1.0),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -83,10 +90,12 @@ object AutonomousRoutines {
             // loaded into the robot than start flywheel motor leading into shooting
             FollowPath(PathManager.ppgSpikeMarkFromBackLaunchToLoadingZonePark, true),
             Delay(3.0),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
-            // After done loading, move to the back launch zone and shoot
-            FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true),
-            Delay(1.5),
+            ParallelGroup(
+                FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
+                // After done loading, move to the back launch zone and shoot
+                FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true)
+            ),
+            Delay(2.5),
             FlywheelShooterSubsystem.kickArtifact(),
             Delay(1.0),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -101,7 +110,7 @@ object AutonomousRoutines {
 //            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
 //            // After done loading, move to the back launch zone and shoot
 //            FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true),
-//            Delay(1.5),
+//            Delay(2.5),
 //            FlywheelShooterSubsystem.kickArtifact(),
 //            Delay(1.0),
 //            FlywheelShooterSubsystem.kickArtifact(),
