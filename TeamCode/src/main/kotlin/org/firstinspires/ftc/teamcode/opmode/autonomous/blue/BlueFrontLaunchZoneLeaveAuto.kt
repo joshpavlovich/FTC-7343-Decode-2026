@@ -13,18 +13,18 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 @Autonomous(
     name = "Blue Leave Auto",
     group = "Blue Alliance",
-    preselectTeleOp = "Pedro TeleOp"
+preselectTeleOp = "Manual TeleOp"
 )
 class BlueFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )

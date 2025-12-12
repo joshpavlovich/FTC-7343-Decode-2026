@@ -14,16 +14,14 @@ import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
-import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
 
-@Disabled
 @TeleOp(name = "Manual TeleOp")
 class TeleOp : NextFTCOpMode() {
     init {
         addComponents(
-            SubsystemComponent(IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
@@ -47,8 +45,8 @@ class TeleOp : NextFTCOpMode() {
         )
         driverControlled()
 
-        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
-        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
+//        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
+//        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())

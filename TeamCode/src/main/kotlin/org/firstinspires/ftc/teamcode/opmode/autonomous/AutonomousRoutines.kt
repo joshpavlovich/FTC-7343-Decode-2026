@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.autonomous
 import dev.nextftc.core.commands.delays.Delay
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.extensions.pedro.FollowPath
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
@@ -15,9 +16,9 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
             FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true),
-            Delay(1.5),
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+            Delay(2.0),
             FlywheelShooterSubsystem.kickArtifact(),
             Delay(1.0),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -43,18 +44,18 @@ object AutonomousRoutines {
 
             // TODO: DO WE HAVE ENOUGH TIME TO GO BACK TO THE LOADING ZONE, SHOOT AGAIN, AND LEAVE??
             //  IF NOT, THEN COMMENT OUT THE LINES BELOW
-            FollowPath(PathManager.frontLaunchZoneShootingToLoadingZone, true),
-            Delay(3.0),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
-            // After done loading, move to the front launch zone and shoot
-            FollowPath(PathManager.loadingZoneToFrontLaunchZoneShooting, true),
-            Delay(1.5),
-            FlywheelShooterSubsystem.kickArtifact(),
-            Delay(1.0),
-            FlywheelShooterSubsystem.kickArtifact(),
-            Delay(1.0),
-            FlywheelShooterSubsystem.kickArtifact(),
-            FlywheelShooterSubsystem.stopSpin(),
+//            FollowPath(PathManager.frontLaunchZoneShootingToLoadingZone, true),
+//            Delay(3.0),
+//            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+//            // After done loading, move to the front launch zone and shoot
+//            FollowPath(PathManager.loadingZoneToFrontLaunchZoneShooting, true),
+//            Delay(1.5),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            Delay(1.0),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            Delay(1.0),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            FlywheelShooterSubsystem.stopSpin(),
             // TODO: DO WE HAVE ENOUGH TIME TO GO BACK TO THE LOADING ZONE, SHOOT AGAIN, AND LEAVE??
             //  IF NOT, THEN COMMENT OUT THE LINES ABOVE
 
@@ -67,7 +68,7 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
             FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
             Delay(1.5),
             FlywheelShooterSubsystem.kickArtifact(),
@@ -82,7 +83,7 @@ object AutonomousRoutines {
             // loaded into the robot than start flywheel motor leading into shooting
             FollowPath(PathManager.ppgSpikeMarkFromBackLaunchToLoadingZonePark, true),
             Delay(3.0),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
             // After done loading, move to the back launch zone and shoot
             FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true),
             Delay(1.5),
@@ -95,18 +96,18 @@ object AutonomousRoutines {
 
             // TODO: DO WE HAVE ENOUGH TIME TO GO BACK TO THE LOADING ZONE, SHOOT AGAIN, AND LEAVE??
             //  IF NOT, THEN COMMENT OUT THE LINES BELOW
-            FollowPath(PathManager.backLaunchZoneShootingToLoadingZone, true),
-            Delay(3.0),
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE),
-            // After done loading, move to the back launch zone and shoot
-            FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true),
-            Delay(1.5),
-            FlywheelShooterSubsystem.kickArtifact(),
-            Delay(1.0),
-            FlywheelShooterSubsystem.kickArtifact(),
-            Delay(1.0),
-            FlywheelShooterSubsystem.kickArtifact(),
-            FlywheelShooterSubsystem.stopSpin(),
+//            FollowPath(PathManager.backLaunchZoneShootingToLoadingZone, true),
+//            Delay(3.0),
+//            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE),
+//            // After done loading, move to the back launch zone and shoot
+//            FollowPath(PathManager.loadingZoneToBackLaunchZoneShooting, true),
+//            Delay(1.5),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            Delay(1.0),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            Delay(1.0),
+//            FlywheelShooterSubsystem.kickArtifact(),
+//            FlywheelShooterSubsystem.stopSpin(),
             // TODO: DO WE HAVE ENOUGH TIME TO GO BACK TO THE LOADING ZONE, SHOOT AGAIN, AND LEAVE??
             //  IF NOT, THEN COMMENT OUT THE LINES ABOVE
 

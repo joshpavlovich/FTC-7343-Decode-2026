@@ -19,9 +19,10 @@ public class Constants {
             .mass(10.43262) // Mass is in kilograms...Remember to convert lbs to kg (Pounds × 0.45359237)!
             .forwardZeroPowerAcceleration(-38.50)
             .lateralZeroPowerAcceleration(-59.78)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.02, .02))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0, 0.04, .025))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015,0, 0.0000075, 0.6, 0.01));
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, .025))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.0, 0, 0.02, 0.01))
+
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015,0,0.001,0.6,0.01));
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -36,7 +37,7 @@ public class Constants {
             .xVelocity(61.451191098671)
             .yVelocity(48.932598804864);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, .75, 0);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-4.5)
@@ -48,7 +49,7 @@ public class Constants {
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        followerConstants.setCentripetalScaling(0.0015);
+        followerConstants.setCentripetalScaling(0.0005);
 
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pathConstraints(pathConstraints)

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShoo
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
 
+@Disabled
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
     init {
@@ -98,15 +100,14 @@ class PedroTeleOp : NextFTCOpMode() {
 
     override fun onUpdate() {
         // TODO: TEST BREAK OUT OF PEDRO PATH
-        if (!PedroComponent.follower.isBusy) {
-            PedroComponent.follower.breakFollowing()
-        }
+//        if (!PedroComponent.follower.isBusy) {
+//            PedroComponent.follower.breakFollowing()
+//        }
 
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
 
-//        RobotLog.d("Motor Voltage: Drivetrain: " + PedroComponent.follower.drivetrain.voltage.toString())
 
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
