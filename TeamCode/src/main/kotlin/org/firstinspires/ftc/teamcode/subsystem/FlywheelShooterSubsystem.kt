@@ -10,9 +10,9 @@ import dev.nextftc.hardware.powerable.SetPower
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
 const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.50
-const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_MID_AUTO_ZONE = 0.53
-const val FLYWHEEL_MOTOR_POWER_FRONT_AUTO_LAUNCH_ZONE = 0.625
-const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.65
+const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_MID_AUTO_ZONE = 0.45
+const val FLYWHEEL_MOTOR_POWER_FRONT_AUTO_LAUNCH_ZONE = 0.56
+const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.625
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
 private const val KICKER_SERVO_UP_POSITION = 0.35
@@ -51,7 +51,7 @@ object FlywheelShooterSubsystem : Subsystem {
     fun spin(power: Double = 1.0) = SetPower(flyWheelMotorLeft, power).requires(this).and(
         SetPower(flyWheelMotorRight, power).requires(this),
         // TODO: CHANGE WHEN WE KNOW HOW LONG IT TAKES TO SPIN THE FLYWHEEL
-        transfer().afterTime(1.5)
+        transfer().afterTime(0.5)
         // TODO: CHANGE WHEN WE KNOW HOW LONG IT TAKES TO SPIN THE FLYWHEEL
     )
 
@@ -61,13 +61,13 @@ object FlywheelShooterSubsystem : Subsystem {
     )
 
     // TODO: CHANGE MOTOR DIRECTION (-1.0 POWER TO REVERSE) ACCORDING TO LOCATION OF SERVO (RIGHT OR LEFT AND UP OR DOWN)
-    private fun transfer() = SetPower(transferServoBottomLeft, 1.0).requires(this).and(
+    fun transfer() = SetPower(transferServoBottomLeft, 1.0).requires(this).and(
         SetPower(transferServoBottomRight, -1.0).requires(this),
         SetPower(transferServoTopLeft, 1.0).requires(this),
         SetPower(transferServoTopRight, -1.0).requires(this)
     )
 
-    private fun stopTransfer() = SetPower(transferServoBottomLeft, 0.0).requires(this).and(
+    fun stopTransfer() = SetPower(transferServoBottomLeft, 0.0).requires(this).and(
         SetPower(transferServoBottomRight, 0.0).requires(this),
         SetPower(transferServoTopLeft, 0.0).requires(this),
         SetPower(transferServoTopRight, 0.0).requires(this)
