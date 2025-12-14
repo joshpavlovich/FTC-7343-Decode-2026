@@ -13,7 +13,7 @@ object PathManager {
 
     val frontLaunchZoneStartPose = Pose(56.0, 8.0, 90.deg.inRad)
 
-    val frontLaunchZoneShootingPose = Pose(56.0, 21.258, 105.deg.inRad)
+    val frontLaunchZoneShootingPose = Pose(56.0, 21.258, 112.deg.inRad)
 
     val ppgSpikeMarkFromFrontLaunchZonePose = Pose(26.45, 46.767, 180.deg.inRad)
 
@@ -172,8 +172,8 @@ object PathManager {
                 .build()
 
             frontLaunchZoneShootingToFrontLaunchZoneLeavePark = follower.pathBuilder()
-                .addPath(BezierLine(frontLaunchZoneShootingPose, frontLaunchZoneLeaveParkPose.mirror()))
-                .setLinearHeadingInterpolation(frontLaunchZoneShootingPose.mirror().heading, frontLaunchZoneLeaveParkPose.mirror().heading)
+                .addPath(BezierLine(frontLaunchZoneShootingPose, frontLaunchZoneLeaveParkPose))
+                .setLinearHeadingInterpolation(frontLaunchZoneShootingPose.heading, frontLaunchZoneLeaveParkPose.heading)
                 .build()
 
             backLaunchZoneStartToBackLaunchZoneShooting = follower.pathBuilder()
