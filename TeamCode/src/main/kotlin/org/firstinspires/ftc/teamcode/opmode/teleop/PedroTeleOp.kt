@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
+import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
@@ -113,8 +114,21 @@ class PedroTeleOp : NextFTCOpMode() {
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
 
+        ActiveOpMode.telemetry.addData("Distance?", calculateDistance())
 
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
+    }
+
+    val blueGoalPose = Pose(16.3, 131.8)
+
+    fun calculateDistance(): Double {
+        val goalPose = if (AutonomousStateManager.isRedAlliance) {
+            blueGoalPose.mirror()
+        } else {
+            blueGoalPose
+        }
+        val currentPose = PedroComponent.follower.pose
+        return currentPose.distanceFrom(goalPose)
     }
 }
