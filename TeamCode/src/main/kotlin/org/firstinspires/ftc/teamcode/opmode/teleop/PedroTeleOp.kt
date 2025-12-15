@@ -44,6 +44,10 @@ class PedroTeleOp : NextFTCOpMode() {
         PedroComponent.follower.setStartingPose(AutonomousStateManager.startPoseAtEndOfAuto)
         PedroComponent.follower.update()
 
+        Drawing.init()
+    }
+
+    override fun onStartButtonPressed() {
         val driverControlled = PedroDriverControlled(
             drivePower = -Gamepads.gamepad1.leftStickY,
             strafePower = -Gamepads.gamepad1.leftStickX,
@@ -52,10 +56,6 @@ class PedroTeleOp : NextFTCOpMode() {
         )
         driverControlled()
 
-        Drawing.init()
-    }
-
-    override fun onStartButtonPressed() {
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
