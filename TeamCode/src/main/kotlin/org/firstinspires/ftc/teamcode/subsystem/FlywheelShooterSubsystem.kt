@@ -19,8 +19,8 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    private val flyWheelMotorLeft = MotorEx("flywheel_motor_left")
-    private val flyWheelMotorRight = MotorEx("flywheel_motor_right").reversed()
+    private val flyWheelMotorLeft = MotorEx("flywheel_motor_left").brakeMode()
+    private val flyWheelMotorRight = MotorEx("flywheel_motor_right").brakeMode().reversed()
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
@@ -30,10 +30,6 @@ object FlywheelShooterSubsystem : Subsystem {
     private val transferServoBottomRight by lazy { CRServoEx("transfer_servo_bottom_right") }
 
     override fun initialize() {
-        flyWheelMotorLeft.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        flyWheelMotorRight.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-
-        // TODO: INITIALIZE KICKER SERVO POSITION??? 0.0 or the kicker servo's down position???
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }
 
