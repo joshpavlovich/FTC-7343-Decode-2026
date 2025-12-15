@@ -44,18 +44,18 @@ class PedroTeleOp : NextFTCOpMode() {
         PedroComponent.follower.setStartingPose(AutonomousStateManager.startPoseAtEndOfAuto)
         PedroComponent.follower.update()
 
-        Drawing.init()
-    }
-
-    override fun onStartButtonPressed() {
         val driverControlled = PedroDriverControlled(
-            drivePower = Gamepads.gamepad1.leftStickY.negate(),
-            strafePower = Gamepads.gamepad1.leftStickX.negate(),
-            turnPower = Gamepads.gamepad1.rightStickX.negate(),
+            drivePower = -Gamepads.gamepad1.leftStickY,
+            strafePower = -Gamepads.gamepad1.leftStickX,
+            turnPower = -Gamepads.gamepad1.rightStickX,
             robotCentric = true // TODO: WE NEED TO TEST FIELD CENTRIC VS ROBOT CENTRIC, SEE https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
         )
         driverControlled()
 
+        Drawing.init()
+    }
+
+    override fun onStartButtonPressed() {
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
@@ -76,33 +76,38 @@ class PedroTeleOp : NextFTCOpMode() {
         // TODO: ONLY EXECUTE THIS IF IN END GAME?
         // TODO: ONLY EXECUTE IF FOLLOWER IS NOT BUSY?
         // TODO: ONLY EXECUTE ONCE
-        val currentPose = PedroComponent.follower.pose
-        val endGameBasZoneParkPath = if (AutonomousStateManager.isRedAlliance) {
-            PedroComponent.follower.pathBuilder()
-                .addPath(BezierLine(currentPose.mirror(), endGameBasZoneParkPose.mirror()))
-                .setLinearHeadingInterpolation(
-                    currentPose.mirror().heading,
-                    endGameBasZoneParkPose.mirror().heading
-                )
-                .build()
-        } else {
-            PedroComponent.follower.pathBuilder()
-                .addPath(BezierLine(currentPose, endGameBasZoneParkPose))
-                .setLinearHeadingInterpolation(
-                    currentPose.mirror().heading,
-                    endGameBasZoneParkPose.heading
-                )
-                .build()
-        }
 
-        PedroComponent.follower.followPath(endGameBasZoneParkPath, true)
+        if (!PedroComponent.follower.isBusy) {
+            val currentPose = PedroComponent.follower.pose
+            val endGameBasZoneParkPath = if (AutonomousStateManager.isRedAlliance) {
+                PedroComponent.follower.pathBuilder()
+                    .addPath(BezierLine(currentPose, endGameBasZoneParkPose.mirror()))
+                    .setLinearHeadingInterpolation(
+                        currentPose.heading,
+                        endGameBasZoneParkPose.mirror().heading
+                    )
+                    .build()
+            } else {
+                PedroComponent.follower.pathBuilder()
+                    .addPath(BezierLine(currentPose, endGameBasZoneParkPose))
+                    .setLinearHeadingInterpolation(
+                        currentPose.heading,
+                        endGameBasZoneParkPose.heading
+                    )
+                    .build()
+            }
+
+            PedroComponent.follower.followPath(endGameBasZoneParkPath, true)
+        }
     }
 
     override fun onUpdate() {
-        // TODO: TEST BREAK OUT OF PEDRO PATH
-//        if (!PedroComponent.follower.isBusy) {
-//            PedroComponent.follower.breakFollowing()
-//        }
+        PedroComponent.follower.update()
+
+        // TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING
+        if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
+            PedroComponent.follower.startTeleOpDrive()
+        }
 
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
