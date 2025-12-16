@@ -36,7 +36,7 @@ object PathManager {
     lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
 
     // TELEOP POSES
-    val endGameBasZoneParkPose = Pose(38.75, 33.25, 90.deg.inRad)
+    val endGameBasZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
 
     fun buildPaths(follower: Follower) {
         if (AutonomousStateManager.isRedAlliance) {
