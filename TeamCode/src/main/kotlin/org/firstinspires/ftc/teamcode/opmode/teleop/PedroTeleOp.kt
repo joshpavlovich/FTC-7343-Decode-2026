@@ -25,7 +25,6 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShoo
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
 
-@Disabled
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
     init {
