@@ -9,34 +9,27 @@ import dev.nextftc.core.units.deg
 
 object PathManager {
 
-    // ALL POSES ARE ON BLUE SCORING/GOAL SIDE OF FIELD!!!
-
+    // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
     val frontLaunchZoneStartPose = Pose(56.0, 8.0, 90.deg.inRad)
-
     val frontLaunchZoneShootingPose = Pose(56.0, 21.258, 112.deg.inRad)
-
     val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
-
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
-
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
-
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
-
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 90.deg.inRad)
 
-    lateinit var frontLaunchZoneStartToPark: PathChain
-
-    lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
-
-    lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain
-
-    lateinit var backLaunchZoneStartToBackLaunchZoneShooting: PathChain
-
-    lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
-
     // TELEOP POSES
-    val endGameBasZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
+    val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
+    val blueFrontShootingPose = Pose(92.0, 13.0, 125.deg.inRad)
+
+    // FIELD LOCATION POSES
+    val blueGoalPose = Pose(16.3, 131.8)
+
+    lateinit var frontLaunchZoneStartToPark: PathChain
+    lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
+    lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain
+    lateinit var backLaunchZoneStartToBackLaunchZoneShooting: PathChain
+    lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
 
     fun buildPaths(follower: Follower) {
         if (AutonomousStateManager.isRedAlliance) {
