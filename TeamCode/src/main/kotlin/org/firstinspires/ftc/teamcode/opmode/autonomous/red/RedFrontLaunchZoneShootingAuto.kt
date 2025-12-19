@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 @Autonomous(
     name = "Red Front LaunchZone Shooting Auto",
     group = "Red Alliance",
-preselectTeleOp = "Manual TeleOp"
+preselectTeleOp = "Pedro TeleOp"
 )
 class RedFrontLaunchZoneShootingAuto : NextFTCOpMode() {
 
