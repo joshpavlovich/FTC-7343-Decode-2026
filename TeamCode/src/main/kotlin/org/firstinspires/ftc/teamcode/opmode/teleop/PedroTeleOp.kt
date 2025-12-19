@@ -4,7 +4,6 @@ import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
@@ -15,7 +14,9 @@ import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
-import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBasZoneParkPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontShootingPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
@@ -27,6 +28,13 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
 
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
+
+    private val goalPose: Pose get() = if (AutonomousStateManager.isRedAlliance) {
+        blueGoalPose.mirror()
+    } else {
+        blueGoalPose
+    }
+
     init {
         addComponents(
             SubsystemComponent(FlywheelShooterSubsystem),
@@ -59,45 +67,50 @@ class PedroTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
+
+        Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer())
+
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE)
         ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
+
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
 
-        // TODO: ADD PARK POSE AND COMMAND FOR END GAME
+        // TODO: ONLY EXECUTE THIS IF IN END GAME?
         Gamepads.gamepad1.ps.whenBecomesTrue {
-            parkRobotToBaseZone()
+            followDynamicPath(endGameBaseZoneParkPose)
+        }
+
+        Gamepads.gamepad1.triangle.whenBecomesTrue {
+            followDynamicPath(blueFrontShootingPose)
         }
     }
 
-    private fun parkRobotToBaseZone() {
-        // TODO: ONLY EXECUTE THIS IF IN END GAME?
-        // TODO: ONLY EXECUTE IF FOLLOWER IS NOT BUSY?
-        // TODO: ONLY EXECUTE ONCE
-
+    private fun followDynamicPath(pose: Pose) {
         if (!PedroComponent.follower.isBusy) {
             val currentPose = PedroComponent.follower.pose
-            val endGameBasZoneParkPath = if (AutonomousStateManager.isRedAlliance) {
+            val path = if (AutonomousStateManager.isRedAlliance) {
                 PedroComponent.follower.pathBuilder()
-                    .addPath(BezierLine(currentPose, endGameBasZoneParkPose.mirror()))
+                    .addPath(BezierLine(currentPose, pose.mirror()))
                     .setLinearHeadingInterpolation(
                         currentPose.heading,
-                        endGameBasZoneParkPose.mirror().heading
+                        pose.mirror().heading
                     )
                     .build()
             } else {
                 PedroComponent.follower.pathBuilder()
-                    .addPath(BezierLine(currentPose, endGameBasZoneParkPose))
+                    .addPath(BezierLine(currentPose, pose))
                     .setLinearHeadingInterpolation(
                         currentPose.heading,
-                        endGameBasZoneParkPose.heading
+                        pose.heading
                     )
                     .build()
             }
 
-            PedroComponent.follower.followPath(endGameBasZoneParkPath, true)
+            PedroComponent.follower.followPath(path, true)
         }
     }
 
@@ -113,21 +126,14 @@ class PedroTeleOp : NextFTCOpMode() {
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
 
-        ActiveOpMode.telemetry.addData("Distance?", calculateDistance())
+        ActiveOpMode.telemetry.addData("Goal pose", goalPose)
+        ActiveOpMode.telemetry.addData(
+            "Distance to Goal?", PedroComponent.follower.pose.distanceFrom(
+                goalPose
+            )
+        )
 
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
-    }
-
-    val blueGoalPose = Pose(16.3, 131.8)
-
-    fun calculateDistance(): Double {
-        val goalPose = if (AutonomousStateManager.isRedAlliance) {
-            blueGoalPose.mirror()
-        } else {
-            blueGoalPose
-        }
-        val currentPose = PedroComponent.follower.pose
-        return currentPose.distanceFrom(goalPose)
     }
 }
