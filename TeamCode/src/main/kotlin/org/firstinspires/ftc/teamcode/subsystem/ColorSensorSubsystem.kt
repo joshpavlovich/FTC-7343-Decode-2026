@@ -8,14 +8,16 @@ import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 
+private const val DISTANCE_THRESHOLD_CENTIMETER = 8.0
+
 object ColorSensorSubsystem : Subsystem {
 
-    private lateinit var colorSensor: RevColorSensorV3
     private lateinit var blinkinLedDriver: RevBlinkinLedDriver
+    private lateinit var colorSensor: RevColorSensorV3
+
     private var hsv = FloatArray(3)
 
     private val greenRange = 155.0..160.0
-
     private val purpleRange = 180.0..240.0
 
     override fun initialize() {
@@ -27,16 +29,24 @@ object ColorSensorSubsystem : Subsystem {
     override fun periodic() {
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
-        val hue = hsv[0]
-        val currentColorStatus: ColorStatus = when (hue) {
-            in greenRange -> ColorStatus.GREEN
-            in purpleRange -> ColorStatus.PURPLE
-            else -> ColorStatus.UNKNOWN
-        }
-        val pattern: BlinkinPattern = when (currentColorStatus) {
-            ColorStatus.GREEN -> BlinkinPattern.GREEN
-            ColorStatus.PURPLE -> BlinkinPattern.VIOLET
-            ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+        val pattern = if (colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER) {
+            val hue = hsv[0]
+            val currentColorStatus: ColorStatus = when (hue) {
+                in greenRange -> ColorStatus.GREEN
+                in purpleRange -> ColorStatus.PURPLE
+                else -> ColorStatus.UNKNOWN
+            }
+
+            ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
+            ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
+
+            when (currentColorStatus) {
+                ColorStatus.GREEN -> BlinkinPattern.GREEN
+                ColorStatus.PURPLE -> BlinkinPattern.VIOLET
+                ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+            }
+        } else {
+            BlinkinPattern.BREATH_BLUE
         }
 
         blinkinLedDriver.setPattern(pattern)
@@ -45,9 +55,6 @@ object ColorSensorSubsystem : Subsystem {
             "Raw distance sensor",
             colorSensor.getDistance(DistanceUnit.CM)
         )
-        ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
-        ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
-        ActiveOpMode.telemetry.update()
     }
 
     enum class ColorStatus {
