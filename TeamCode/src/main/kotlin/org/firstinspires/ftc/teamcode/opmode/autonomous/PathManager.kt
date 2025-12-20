@@ -23,7 +23,7 @@ object PathManager {
     val blueFrontShootingPose = Pose(92.0, 13.0, 125.deg.inRad)
 
     // FIELD LOCATION POSES
-    val blueGoalPose = Pose(16.3, 131.8)
+    val blueGoalPose = Pose(13.0, 134.7, 110.0.deg.inRad)
 
     lateinit var frontLaunchZoneStartToPark: PathChain
     lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
