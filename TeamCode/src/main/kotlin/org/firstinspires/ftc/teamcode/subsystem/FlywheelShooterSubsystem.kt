@@ -32,10 +32,10 @@ object FlywheelShooterSubsystem : Subsystem {
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }
 
-    fun kickArtifact() = InstantCommand {
+    fun kickArtifact() = transfer().and(InstantCommand {
         if (kickerServo.servo.position == KICKER_SERVO_DOWN_POSITION) kickerServo.position =
             KICKER_SERVO_UP_POSITION
-    }.requires(this)
+    }.requires(this))
 
     fun resetKickerServo() = InstantCommand {
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
@@ -44,10 +44,7 @@ object FlywheelShooterSubsystem : Subsystem {
     // TODO: DO THE SERVOS NEED TO BE DELAYED, SO THAT THE FLYWHEEL CAN SPIN TO THE DESIRED VELOCITY
     // FIRST IF THEY ARE IN A PARALLEL GROUP? SEE, https://nextftc.dev/nextftc/commands/delays
     fun spin(power: Double = 1.0) = SetPower(flyWheelMotorLeft, power).requires(this).and(
-        SetPower(flyWheelMotorRight, power).requires(this),
-        // TODO: CHANGE WHEN WE KNOW HOW LONG IT TAKES TO SPIN THE FLYWHEEL
-        transfer().afterTime(0.5)
-        // TODO: CHANGE WHEN WE KNOW HOW LONG IT TAKES TO SPIN THE FLYWHEEL
+        SetPower(flyWheelMotorRight, power).requires(this)
     )
 
     fun stopSpin() = SetPower(flyWheelMotorLeft, 0.0).requires(this).and(
