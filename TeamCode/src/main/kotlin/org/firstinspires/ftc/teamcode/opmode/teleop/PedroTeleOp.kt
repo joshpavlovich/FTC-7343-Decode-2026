@@ -80,11 +80,11 @@ class PedroTeleOp : NextFTCOpMode() {
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
 
         // TODO: ONLY EXECUTE THIS IF IN END GAME?
-        Gamepads.gamepad1.ps.whenBecomesTrue {
+        Gamepads.gamepad1.ps.whenTrue {
             followDynamicPath(endGameBaseZoneParkPose)
         }
 
-        Gamepads.gamepad1.triangle.whenBecomesTrue {
+        Gamepads.gamepad1.triangle.whenTrue {
             followDynamicPath(blueFrontShootingPose)
         }
     }
