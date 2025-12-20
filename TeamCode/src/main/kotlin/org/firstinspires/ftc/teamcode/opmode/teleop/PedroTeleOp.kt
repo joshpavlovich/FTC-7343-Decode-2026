@@ -19,25 +19,27 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
 
-private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
+private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
 
-    private val goalPose: Pose get() = if (AutonomousStateManager.isRedAlliance) {
-        blueGoalPose.mirror()
-    } else {
-        blueGoalPose
-    }
+    private val goalPose: Pose
+        get() = if (AutonomousStateManager.isRedAlliance) {
+            blueGoalPose.mirror()
+        } else {
+            blueGoalPose
+        }
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent,
             BindingsComponent
