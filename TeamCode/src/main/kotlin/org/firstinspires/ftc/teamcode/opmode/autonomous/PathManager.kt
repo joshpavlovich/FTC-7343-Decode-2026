@@ -20,7 +20,7 @@ object PathManager {
 
     // TELEOP POSES
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
-    val blueBackShootingPose = Pose(61.977, 82.022, 130.deg.inRad)
+    val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
     val blueFrontShootingPose = Pose(92.0, 13.0, 125.deg.inRad)
 
     // FIELD LOCATION POSES

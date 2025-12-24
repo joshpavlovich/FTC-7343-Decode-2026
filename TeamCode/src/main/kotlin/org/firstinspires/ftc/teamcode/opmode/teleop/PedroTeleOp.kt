@@ -21,8 +21,8 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZ
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
 
@@ -75,11 +75,11 @@ class PedroTeleOp : NextFTCOpMode() {
             .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer())
 
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
         ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
 
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
 
         // TODO: ONLY EXECUTE THIS IF IN END GAME?
