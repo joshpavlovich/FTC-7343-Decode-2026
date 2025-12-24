@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAU
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
@@ -124,6 +125,10 @@ class PedroTeleOp : NextFTCOpMode() {
     override fun onUpdate() {
         PedroComponent.follower.update()
 
+        val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
+        val calculateVelocity = calculateRpm(distanceFrom)
+        FlywheelShooterSubsystem.spin(calculateVelocity).schedule()
+
         // TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING
         if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
             PedroComponent.follower.startTeleOpDrive()
@@ -134,11 +139,10 @@ class PedroTeleOp : NextFTCOpMode() {
         ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
 
         ActiveOpMode.telemetry.addData("Goal pose", goalPose)
-        ActiveOpMode.telemetry.addData(
-            "Distance to Goal?", PedroComponent.follower.pose.distanceFrom(
-                goalPose
-            )
-        )
+
+        ActiveOpMode.telemetry.addData("Distance to Goal?", distanceFrom)
+
+        ActiveOpMode.telemetry.addData("Calculated Velocity", calculateVelocity)
 
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()

@@ -25,7 +25,7 @@ const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.625
 const val FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE = 2600.0
 const val FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE = 3600.0
 
-const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2400.0
+const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2200.0
 const val FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE = 3000.0
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
@@ -37,7 +37,7 @@ object FlywheelShooterSubsystem : Subsystem {
 
     // TODO: Tune these values
     private val flywheelPID = PIDCoefficients(0.008, 0.0, 0.0)
-    private val flywheelFF = BasicFeedforwardParameters(0.00055,0.0,0.0)
+    private val flywheelFF = BasicFeedforwardParameters(0.00055, 0.0, 0.0)
 
     private val flywheelController = controlSystem {
         velPid(flywheelPID)
@@ -130,4 +130,10 @@ object FlywheelShooterSubsystem : Subsystem {
 
         addData("Kicker Servo Position", kickerServo.position)
     }
+
+    // https://github.com/AtomicRobotics3805/Decode/blob/leaguemeet2/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/AutoAdjustingCalc.kt
+    // Adapted from AutoAdjustingCalc.calculatePower()
+    fun calculateRpm(distance: Double): Double =
+        (0.0357839 * (distance * distance)) + (8.43768 * distance) + 1714.48071
+
 }
