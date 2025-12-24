@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontShootingPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueBackShootingPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
@@ -86,9 +87,15 @@ class PedroTeleOp : NextFTCOpMode() {
             followDynamicPath(endGameBaseZoneParkPose)
         }
 
-        Gamepads.gamepad1.triangle.whenTrue {
+        Gamepads.gamepad1.cross.whenTrue {
             followDynamicPath(blueFrontShootingPose)
+
         }
+            Gamepads.gamepad1.triangle.whenTrue {
+                followDynamicPath(blueBackShootingPose)
+
+            }
+
     }
 
     private fun followDynamicPath(pose: Pose) {
@@ -139,3 +146,4 @@ class PedroTeleOp : NextFTCOpMode() {
         ActiveOpMode.telemetry.update()
     }
 }
+//

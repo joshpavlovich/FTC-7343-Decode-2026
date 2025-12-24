@@ -8,7 +8,7 @@ import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 
-private const val DISTANCE_THRESHOLD_CENTIMETER = 8.0
+private const val DISTANCE_THRESHOLD_CENTIMETER = 5.0
 
 object ColorSensorSubsystem : Subsystem {
 
@@ -63,3 +63,4 @@ object ColorSensorSubsystem : Subsystem {
         UNKNOWN
     }
 }
+//
