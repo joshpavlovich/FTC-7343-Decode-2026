@@ -14,9 +14,11 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 object KickerSubsystem : Subsystem {
 
-    private val kickerServo by lazy { ServoEx("kicker_servo") }
+    private lateinit var kickerServo: ServoEx
 
     override fun initialize() {
+        kickerServo = ServoEx("kicker_servo")
+
         // TODO: INITIALIZE KICKER SERVO POSITION??? 0.0 or the kicker servo's down position???
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }

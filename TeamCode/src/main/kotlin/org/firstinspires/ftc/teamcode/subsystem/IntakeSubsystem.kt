@@ -8,10 +8,10 @@ import dev.nextftc.hardware.impl.MotorEx
 object IntakeSubsystem : Subsystem {
 
     // TODO: NOT SURE OF THE INITIAL MOTOR DIRECTION BASED ON HOW IT IS MOUNTED
-    private val intakeMotor by lazy { MotorEx("intake_motor").reversed() }
+    private lateinit var intakeMotor: MotorEx
 
     override fun initialize() {
-        intakeMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        intakeMotor = MotorEx("intake_motor").reversed().brakeMode()
     }
 
     val forward = InstantCommand { intakeMotor.power = 1.0 }.requires(this)
