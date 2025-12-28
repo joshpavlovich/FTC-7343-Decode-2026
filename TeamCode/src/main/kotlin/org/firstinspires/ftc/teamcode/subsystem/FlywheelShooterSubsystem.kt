@@ -33,6 +33,10 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 private const val ENCODER_TICKS_PER_REV = 28.0
 
+// Define your motor's physical limits
+private const val MAX_VELOCITY = 4000.0 // The fastest your motor can safely spin
+private const val MIN_VELOCITY = 1714.48071 // Usually 0, or your 'c' value (1714.0)
+
 object FlywheelShooterSubsystem : Subsystem {
 
     // TODO: Tune these values
@@ -57,16 +61,21 @@ object FlywheelShooterSubsystem : Subsystem {
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
-    private val transferServoTopLeft by lazy { CRServoEx("transfer_servo_top_left") }
-    private val transferServoBottomLeft by lazy { CRServoEx("transfer_servo_bottom_left") }
-    private val transferServoTopRight by lazy { CRServoEx("transfer_servo_top_right") }
-    private val transferServoBottomRight by lazy { CRServoEx("transfer_servo_bottom_right") }
+    private lateinit var transferServoTopLeft: CRServoEx
+    private lateinit var transferServoBottomLeft: CRServoEx
+    private lateinit var transferServoTopRight: CRServoEx
+    private lateinit var transferServoBottomRight: CRServoEx
 
     override fun initialize() {
         super.initialize()
         flywheelMotorLeft = MotorEx("flywheel_motor_left")
         flywheelMotorRight = MotorEx("flywheel_motor_right").reversed()
         motors = MotorGroup(flywheelMotorLeft, flywheelMotorRight)
+
+        transferServoTopLeft = CRServoEx("transfer_servo_top_left")
+        transferServoBottomLeft = CRServoEx("transfer_servo_bottom_left")
+        transferServoTopRight = CRServoEx("transfer_servo_top_right")
+        transferServoBottomRight = CRServoEx("transfer_servo_bottom_right")
 
         voltageSensor = ActiveOpMode.hardwareMap.voltageSensor.first()
 
@@ -133,7 +142,12 @@ object FlywheelShooterSubsystem : Subsystem {
 
     // https://github.com/AtomicRobotics3805/Decode/blob/leaguemeet2/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/AutoAdjustingCalc.kt
     // Adapted from AutoAdjustingCalc.calculatePower()
-    fun calculateRpm(distance: Double): Double =
-        (0.0357839 * (distance * distance)) + (8.43768 * distance) + 1714.48071
+    fun calculateRpm(distance: Double): Double {
+        // If the sensor doesn't see the target, don't spin the motor at all
+        if (distance <= 0) return 0.0
+
+        val rawVelocity = (0.0357839 * (distance * distance)) + (8.43768 * distance) + MIN_VELOCITY
+        return rawVelocity.coerceIn(MIN_VELOCITY, MAX_VELOCITY)
+    }
 
 }
