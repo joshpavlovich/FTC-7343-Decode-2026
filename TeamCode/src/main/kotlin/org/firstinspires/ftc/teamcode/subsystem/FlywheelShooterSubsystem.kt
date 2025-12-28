@@ -26,7 +26,7 @@ const val FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE = 2600.0
 const val FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE = 3600.0
 
 const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2200.0
-const val FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE = 3000.0
+const val FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE = 3200.0
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
 private const val KICKER_SERVO_UP_POSITION = 0.35
@@ -112,7 +112,7 @@ object FlywheelShooterSubsystem : Subsystem {
      * Sets the target velocity of the flywheel.
      * @param velocity The target velocity in ticks per second.
      */
-    fun spin(velocity: Double = 600.0): Command =
+    fun spin(velocity: Double = 1200.0): Command =
         RunToVelocity(flywheelController, (velocity / 60.0) * ENCODER_TICKS_PER_REV).requires(this)
 
     fun stopSpin() = spin(0.0).and(stopTransfer())
