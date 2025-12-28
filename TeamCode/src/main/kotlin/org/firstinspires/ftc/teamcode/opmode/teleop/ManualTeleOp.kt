@@ -64,6 +64,10 @@ class ManualTeleOp : NextFTCOpMode() {
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
     }
 
+    override fun onStop() {
+        FlywheelShooterSubsystem.stopSpin()
+    }
+
     override fun onUpdate() {
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()

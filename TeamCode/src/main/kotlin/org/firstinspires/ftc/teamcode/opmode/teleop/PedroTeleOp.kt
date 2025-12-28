@@ -97,29 +97,8 @@ class PedroTeleOp : NextFTCOpMode() {
         }
     }
 
-    private fun followDynamicPath(pose: Pose) {
-        if (!PedroComponent.follower.isBusy) {
-            val currentPose = PedroComponent.follower.pose
-            val path = if (AutonomousStateManager.isRedAlliance) {
-                PedroComponent.follower.pathBuilder()
-                    .addPath(BezierLine(currentPose, pose.mirror()))
-                    .setLinearHeadingInterpolation(
-                        currentPose.heading,
-                        pose.mirror().heading
-                    )
-                    .build()
-            } else {
-                PedroComponent.follower.pathBuilder()
-                    .addPath(BezierLine(currentPose, pose))
-                    .setLinearHeadingInterpolation(
-                        currentPose.heading,
-                        pose.heading
-                    )
-                    .build()
-            }
-
-            PedroComponent.follower.followPath(path, true)
-        }
+    override fun onStop() {
+        FlywheelShooterSubsystem.stopSpin()
     }
 
     override fun onUpdate() {
@@ -146,5 +125,30 @@ class PedroTeleOp : NextFTCOpMode() {
 
         ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
+    }
+
+    private fun followDynamicPath(pose: Pose) {
+        if (!PedroComponent.follower.isBusy) {
+            val currentPose = PedroComponent.follower.pose
+            val path = if (AutonomousStateManager.isRedAlliance) {
+                PedroComponent.follower.pathBuilder()
+                    .addPath(BezierLine(currentPose, pose.mirror()))
+                    .setLinearHeadingInterpolation(
+                        currentPose.heading,
+                        pose.mirror().heading
+                    )
+                    .build()
+            } else {
+                PedroComponent.follower.pathBuilder()
+                    .addPath(BezierLine(currentPose, pose))
+                    .setLinearHeadingInterpolation(
+                        currentPose.heading,
+                        pose.heading
+                    )
+                    .build()
+            }
+
+            PedroComponent.follower.followPath(path, true)
+        }
     }
 }

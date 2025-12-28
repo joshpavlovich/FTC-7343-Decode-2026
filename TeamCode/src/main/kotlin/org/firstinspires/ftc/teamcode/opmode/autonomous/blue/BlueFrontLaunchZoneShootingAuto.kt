@@ -47,7 +47,7 @@ class BlueFrontLaunchZoneShootingAuto : NextFTCOpMode() {
     }
 
     override fun onStop() {
-        super.onStop()
+        FlywheelShooterSubsystem.stopSpin()
         AutonomousStateManager.startPoseAtEndOfAuto = PedroComponent.follower.pose
     }
 
