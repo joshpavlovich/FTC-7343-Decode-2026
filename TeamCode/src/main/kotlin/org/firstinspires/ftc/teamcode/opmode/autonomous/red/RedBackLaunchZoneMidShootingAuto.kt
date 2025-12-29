@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 @Autonomous(
-    name = "Red Back LaunchZone Shooting Auto",
+    name = "\uD83D\uDFE5 Red Back Launch Zone Shoot Auto",
     group = "Red Alliance",
     preselectTeleOp = "Pedro TeleOp"
 )

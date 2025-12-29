@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystem
 
 import android.graphics.Color
+import com.pedropathing.util.Timer
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver.BlinkinPattern
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoTransfer
 
 private const val DISTANCE_THRESHOLD_CENTIMETER = 5.0
 
 object ColorSensorSubsystem : Subsystem {
+
+    private val colorDetectionTimer by lazy { Timer() }
 
     private lateinit var blinkinLedDriver: RevBlinkinLedDriver
     private lateinit var colorSensor: RevColorSensorV3
@@ -29,25 +33,33 @@ object ColorSensorSubsystem : Subsystem {
     override fun periodic() {
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
-        val pattern = if (colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER) {
-            val hue = hsv[0]
-            val currentColorStatus: ColorStatus = when (hue) {
-                in greenRange -> ColorStatus.GREEN
-                in purpleRange -> ColorStatus.PURPLE
-                else -> ColorStatus.UNKNOWN
-            }
+        val pattern =
+            if (colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER) {
+                val hue = hsv[0]
+                val currentColorStatus: ColorStatus = when (hue) {
+                    in greenRange -> ColorStatus.GREEN
+                    in purpleRange -> ColorStatus.PURPLE
+                    else -> ColorStatus.UNKNOWN
+                }
 
-            ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
-            ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
+                ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
+                ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
 
-            when (currentColorStatus) {
-                ColorStatus.GREEN -> BlinkinPattern.GREEN
-                ColorStatus.PURPLE -> BlinkinPattern.VIOLET
-                ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+                if (currentColorStatus != ColorStatus.UNKNOWN) {
+                    colorDetectionTimer.resetTimer()
+                }
+
+                when (currentColorStatus) {
+                    ColorStatus.GREEN -> BlinkinPattern.GREEN
+                    ColorStatus.PURPLE -> BlinkinPattern.VIOLET
+                    ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+                }
+            } else {
+                if (colorDetectionTimer.elapsedTimeSeconds > 3.0) {
+                    autoTransfer()
+                }
+                BlinkinPattern.BREATH_BLUE
             }
-        } else {
-            BlinkinPattern.BREATH_BLUE
-        }
 
         blinkinLedDriver.setPattern(pattern)
 

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 @Autonomous(
-    name = "Red Leave Auto",
+    name = "\uD83D\uDFE5 Red Leave Auto",
     group = "Red Alliance",
     preselectTeleOp = "Pedro TeleOp"
 )

@@ -24,7 +24,6 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
@@ -69,19 +68,19 @@ class PedroTeleOp : NextFTCOpMode() {
         driverControlled()
 
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
-            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
+            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
+            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
 
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer())
+            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
 
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
-        ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
+        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
 
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
-        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
+        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
 
         // TODO: ONLY EXECUTE THIS IF IN END GAME?
         Gamepads.gamepad1.ps.whenTrue {
@@ -106,7 +105,7 @@ class PedroTeleOp : NextFTCOpMode() {
 
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculateVelocity = calculateRpm(distanceFrom)
-        FlywheelShooterSubsystem.spin(calculateVelocity).schedule()
+        FlywheelShooterSubsystem.startSpin(calculateVelocity).schedule()
 
         // TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING
         if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
@@ -114,16 +113,12 @@ class PedroTeleOp : NextFTCOpMode() {
         }
 
         Drawing.drawDebug(PedroComponent.follower)
+        ActiveOpMode.telemetry.addData("Pedro Follower isBusy", PedroComponent.follower.isBusy)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
-        ActiveOpMode.telemetry.addData("isBusy", PedroComponent.follower.isBusy)
-
         ActiveOpMode.telemetry.addData("Goal pose", goalPose)
-
         ActiveOpMode.telemetry.addData("Distance to Goal?", distanceFrom)
-
         ActiveOpMode.telemetry.addData("Calculated Velocity", calculateVelocity)
 
-        ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
     }
 

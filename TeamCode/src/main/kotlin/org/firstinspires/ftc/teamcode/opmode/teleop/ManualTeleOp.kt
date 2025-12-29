@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.addShooterDetails
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
@@ -49,19 +48,19 @@ class ManualTeleOp : NextFTCOpMode() {
 //        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact())
-            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo())
+            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
+            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
 
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer())
+            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
 
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
-        ) whenBecomesFalse FlywheelShooterSubsystem.stopSpin()
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
+        ) whenBecomesFalse (FlywheelShooterSubsystem.stopSpin)
 
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.spin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
-        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin())
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
+        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
     }
 
     override fun onStop() {
@@ -69,7 +68,6 @@ class ManualTeleOp : NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        ActiveOpMode.telemetry.addShooterDetails()
         ActiveOpMode.telemetry.update()
     }
 }
