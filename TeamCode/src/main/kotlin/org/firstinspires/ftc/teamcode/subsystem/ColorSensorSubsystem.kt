@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoTransfer
 
 private const val DISTANCE_THRESHOLD_CENTIMETER = 5.0
+private const val END_GAME_START_TIME_SECONDS = 100
 
 object ColorSensorSubsystem : Subsystem {
 
@@ -33,8 +34,10 @@ object ColorSensorSubsystem : Subsystem {
     override fun periodic() {
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
-        val pattern =
-            if (colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER) {
+        val pattern = when {
+            ActiveOpMode.opModeIsActive && ActiveOpMode.runtime >= END_GAME_START_TIME_SECONDS -> BlinkinPattern.FIRE_MEDIUM
+
+            colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER -> {
                 val hue = hsv[0]
                 val currentColorStatus: ColorStatus = when (hue) {
                     in greenRange -> ColorStatus.GREEN
@@ -54,12 +57,16 @@ object ColorSensorSubsystem : Subsystem {
                     ColorStatus.PURPLE -> BlinkinPattern.VIOLET
                     ColorStatus.UNKNOWN -> BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE
                 }
-            } else {
+            }
+
+            else -> {
                 if (colorDetectionTimer.elapsedTimeSeconds > 3.0) {
                     autoTransfer()
                 }
+
                 BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE
             }
+        }
 
         blinkinLedDriver.setPattern(pattern)
 
