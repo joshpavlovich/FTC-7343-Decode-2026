@@ -52,13 +52,13 @@ object ColorSensorSubsystem : Subsystem {
                 when (currentColorStatus) {
                     ColorStatus.GREEN -> BlinkinPattern.GREEN
                     ColorStatus.PURPLE -> BlinkinPattern.VIOLET
-                    ColorStatus.UNKNOWN -> BlinkinPattern.BREATH_BLUE
+                    ColorStatus.UNKNOWN -> BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE
                 }
             } else {
                 if (colorDetectionTimer.elapsedTimeSeconds > 3.0) {
                     autoTransfer()
                 }
-                BlinkinPattern.BREATH_BLUE
+                BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE
             }
 
         blinkinLedDriver.setPattern(pattern)
