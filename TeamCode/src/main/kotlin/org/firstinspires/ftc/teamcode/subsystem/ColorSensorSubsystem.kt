@@ -10,8 +10,9 @@ import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoTransfer
 
+const val END_GAME_START_TIME_SECONDS = 100.0
+
 private const val DISTANCE_THRESHOLD_CENTIMETER = 5.0
-private const val END_GAME_START_TIME_SECONDS = 100
 
 object ColorSensorSubsystem : Subsystem {
 
@@ -35,7 +36,7 @@ object ColorSensorSubsystem : Subsystem {
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsv)
 
         val pattern = when {
-            ActiveOpMode.opModeIsActive && ActiveOpMode.runtime >= END_GAME_START_TIME_SECONDS -> BlinkinPattern.FIRE_MEDIUM
+            ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS -> BlinkinPattern.FIRE_MEDIUM
 
             colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER -> {
                 val hue = hsv[0]
@@ -45,7 +46,6 @@ object ColorSensorSubsystem : Subsystem {
                     else -> ColorStatus.UNKNOWN
                 }
 
-                ActiveOpMode.telemetry.addData("Raw hsv hue", hue)
                 ActiveOpMode.telemetry.addData("Current color status", currentColorStatus.name)
 
                 if (currentColorStatus != ColorStatus.UNKNOWN) {
