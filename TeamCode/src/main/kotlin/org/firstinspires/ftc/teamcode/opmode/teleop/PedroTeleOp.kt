@@ -5,6 +5,7 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import dev.nextftc.bindings.BindingManager
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.extensions.pedro.PedroComponent
@@ -21,12 +22,15 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZ
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.END_GAME_START_TIME_SECONDS
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
+
+private const val LAYER_ENDGAME = "endgame"
 
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
@@ -53,17 +57,17 @@ class PedroTeleOp : NextFTCOpMode() {
         super.onInit()
 
         PedroComponent.follower.setStartingPose(AutonomousStateManager.startPoseAtEndOfAuto)
-        PedroComponent.follower.update()
 
         Drawing.init()
     }
 
     override fun onStartButtonPressed() {
+        resetRuntime()
+
         val driverControlled = PedroDriverControlled(
             drivePower = -Gamepads.gamepad1.leftStickY,
             strafePower = -Gamepads.gamepad1.leftStickX,
-            turnPower = -Gamepads.gamepad1.rightStickX,
-            robotCentric = true // TODO: WE NEED TO TEST FIELD CENTRIC VS ROBOT CENTRIC, SEE https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#field-centric
+            turnPower = -Gamepads.gamepad1.rightStickX
         )
         driverControlled()
 
@@ -82,9 +86,10 @@ class PedroTeleOp : NextFTCOpMode() {
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
 
-        // TODO: ONLY EXECUTE THIS IF IN END GAME?
-        Gamepads.gamepad1.ps.whenTrue {
-            followDynamicPath(endGameBaseZoneParkPose)
+        Gamepads.gamepad1.ps.inLayer(LAYER_ENDGAME) {
+            whenTrue {
+                followDynamicPath(endGameBaseZoneParkPose)
+            }
         }
 
         Gamepads.gamepad1.cross.whenTrue {
@@ -101,7 +106,10 @@ class PedroTeleOp : NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        PedroComponent.follower.update()
+        if (ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
+            BindingManager.layer = LAYER_ENDGAME
+        }
+        ActiveOpMode.telemetry.addData("BindingManager Layer", BindingManager.layer)
 
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculateVelocity = calculateRpm(distanceFrom)
