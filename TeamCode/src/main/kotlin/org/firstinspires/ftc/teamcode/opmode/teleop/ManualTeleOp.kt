@@ -33,6 +33,8 @@ class ManualTeleOp : NextFTCOpMode() {
     private val backRightMotor = MotorEx("back_right_motor").brakeMode().reversed()
 
     override fun onStartButtonPressed() {
+        resetRuntime()
+
         val driverControlled = MecanumDriverControlled(
             frontLeftMotor = frontLeftMotor,
             frontRightMotor = frontRightMotor,
