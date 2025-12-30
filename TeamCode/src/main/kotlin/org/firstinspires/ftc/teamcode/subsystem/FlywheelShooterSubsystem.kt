@@ -143,7 +143,7 @@ object FlywheelShooterSubsystem : Subsystem {
         )
 
 
-    val autoTransfer: Command
+    val autoStopTransfer: Command
         get() = if (transferServoBottomLeft.power > 0) {
             stopTransfer
         } else NullCommand()

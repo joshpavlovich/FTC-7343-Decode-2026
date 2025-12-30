@@ -8,7 +8,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3
 import dev.nextftc.core.subsystems.Subsystem
 import dev.nextftc.ftc.ActiveOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
-import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoTransfer
+import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoStopTransfer
 
 const val END_GAME_START_TIME_SECONDS = 100.0
 
@@ -61,7 +61,7 @@ object ColorSensorSubsystem : Subsystem {
 
             else -> {
                 if (colorDetectionTimer.elapsedTimeSeconds > 3.0) {
-                    autoTransfer()
+                    autoStopTransfer()
                 }
 
                 BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE
