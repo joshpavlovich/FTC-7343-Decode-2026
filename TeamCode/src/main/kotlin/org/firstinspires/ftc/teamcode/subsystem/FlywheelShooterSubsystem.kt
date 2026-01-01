@@ -37,7 +37,7 @@ private const val MIN_VELOCITY = 1714.48071 // Usually 0, or your 'c' value (171
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    // TODO: Tune these values
+    // TODO: Tune these values???
     private val flywheelPID = PIDCoefficients(0.008, 0.0, 0.0)
     private val flywheelFF = BasicFeedforwardParameters(0.00055, 0.0, 0.0)
 
@@ -52,7 +52,6 @@ object FlywheelShooterSubsystem : Subsystem {
     private lateinit var flywheelMotorRight: MotorEx
 
 //    private lateinit var voltageSensor: VoltageSensor
-
     // A nominal voltage for voltage compensation.
     // TODO: You may need to tune this value for your robot's battery.
 //    private const val NOMINAL_VOLTAGE = 12.0
@@ -96,11 +95,24 @@ object FlywheelShooterSubsystem : Subsystem {
         motors.power = motorPower //* voltageMultiplier
 
         ActiveOpMode.telemetry.addData("Flywheel Motor's Power", motors.power)
-        ActiveOpMode.telemetry.addData("Flywheel Motor's Velocity", motors.velocity)
         ActiveOpMode.telemetry.addData("Flywheel Motor Left Power", flywheelMotorLeft.power)
-        ActiveOpMode.telemetry.addData("Flywheel Motor Left Velocity", flywheelMotorLeft.velocity)
         ActiveOpMode.telemetry.addData("Flywheel Motor Right Power", flywheelMotorRight.power)
-        ActiveOpMode.telemetry.addData("Flywheel Motor Right Velocity", flywheelMotorRight.velocity)
+        ActiveOpMode.telemetry.addData(
+            "Target velocity:",
+            flywheelController.goal.velocity / ENCODER_TICKS_PER_REV * 60.0
+        )
+        ActiveOpMode.telemetry.addData(
+            "Flywheel Motor's Velocity",
+            motors.velocity / ENCODER_TICKS_PER_REV * 60.0
+        )
+        ActiveOpMode.telemetry.addData(
+            "Flywheel Motor Left Velocity",
+            flywheelMotorLeft.velocity / ENCODER_TICKS_PER_REV * 60.0
+        )
+        ActiveOpMode.telemetry.addData(
+            "Flywheel Motor Right Velocity",
+            flywheelMotorRight.velocity / ENCODER_TICKS_PER_REV * 60.0
+        )
 
         ActiveOpMode.telemetry.addData("Kicker Servo Position", kickerServo.position)
     }
