@@ -5,7 +5,6 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import dev.nextftc.bindings.BindingManager
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.extensions.pedro.PedroComponent
@@ -22,15 +21,12 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZ
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.END_GAME_START_TIME_SECONDS
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
-
-private const val LAYER_ENDGAME = "endgame"
 
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
@@ -86,10 +82,9 @@ class PedroTeleOp : NextFTCOpMode() {
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
 
-        Gamepads.gamepad1.ps.inLayer(LAYER_ENDGAME) {
-            whenTrue {
-                followDynamicPath(endGameBaseZoneParkPose)
-            }
+        // TODO: DO WE NEED AN END GAME LAYER???
+        Gamepads.gamepad1.ps.whenTrue {
+            followDynamicPath(endGameBaseZoneParkPose)
         }
 
         Gamepads.gamepad1.cross.whenTrue {
@@ -106,11 +101,6 @@ class PedroTeleOp : NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        if (ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
-            BindingManager.layer = LAYER_ENDGAME
-        }
-        ActiveOpMode.telemetry.addData("BindingManager Layer", BindingManager.layer)
-
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculateVelocity = calculateRpm(distanceFrom)
         FlywheelShooterSubsystem.startSpin(calculateVelocity).schedule()
