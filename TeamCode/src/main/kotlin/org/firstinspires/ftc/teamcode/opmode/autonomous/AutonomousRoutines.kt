@@ -20,11 +20,14 @@ object AutonomousRoutines {
                 FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE),
                 FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true)
             ),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            // Add a backup kick in case the first kick doesn't work
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Go from the front launch zone to outside the launch zone tape in order to get leave points
             ParallelGroup(
@@ -41,11 +44,14 @@ object AutonomousRoutines {
                 FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE),
                 FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
             ),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(4.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            // Add a backup kick in case the first kick doesn't work
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
