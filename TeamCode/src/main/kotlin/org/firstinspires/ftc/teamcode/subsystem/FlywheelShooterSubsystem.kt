@@ -67,12 +67,11 @@ object FlywheelShooterSubsystem : Subsystem {
 
     override fun periodic() {
         val motorPower = flywheelController.calculate(motors.state)
-
-        ActiveOpMode.telemetry.addData("Calculated Power", motorPower)
-
         motors.power = motorPower
 
+        ActiveOpMode.telemetry.addData("Calculated Power", motorPower)
         ActiveOpMode.telemetry.addData("Flywheel Motor's Power", motors.power)
+
         try {
             ActiveOpMode.telemetry.addData(
                 "Target velocity",
