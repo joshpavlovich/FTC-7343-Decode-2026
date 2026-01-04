@@ -30,8 +30,7 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 
 private const val ENCODER_TICKS_PER_REV = 28.0
 
-// Define your motor's physical limits
-private const val MAX_MOTOR_RPM = 4000.0 // The fastest your motor can safely spin
+private const val MAX_MOTOR_RPM = 4000.0
 
 object FlywheelShooterSubsystem : Subsystem {
 
