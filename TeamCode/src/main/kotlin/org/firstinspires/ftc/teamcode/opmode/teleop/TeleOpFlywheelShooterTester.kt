@@ -10,8 +10,8 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE
+import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
@@ -34,10 +34,10 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE)
+            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
     }
 

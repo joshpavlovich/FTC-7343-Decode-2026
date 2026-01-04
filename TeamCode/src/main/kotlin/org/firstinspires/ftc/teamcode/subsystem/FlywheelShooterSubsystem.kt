@@ -15,15 +15,10 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.powerable.SetPower
 
-const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.50
-
-const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.625
-const val FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE = 2600.0
-
-const val FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE = 3600.0
-const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2400.0
-
-const val FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE = 3200.0
+const val FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE = 2600.0
+const val FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE = 3600.0
+const val FLYWHEEL_MOTOR_RPM_BACK_AUTO_LAUNCH_ZONE = 2400.0
+const val FLYWHEEL_MOTOR_RPM_FRONT_AUTO_LAUNCH_ZONE = 3200.0
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
 private const val KICKER_SERVO_UP_POSITION = 0.35
@@ -107,10 +102,10 @@ object FlywheelShooterSubsystem : Subsystem {
 
     /**
      * Sets the target velocity of the flywheel.
-     * @param velocity The target velocity in ticks per second.
+     * @param rpm The target velocity in ticks per second.
      */
-    fun startSpin(velocity: Double): Command = InstantCommand {
-        flywheelController.goal = KineticState(0.0, (velocity / 60.0) * ENCODER_TICKS_PER_REV)
+    fun startSpin(rpm: Double): Command = InstantCommand {
+        flywheelController.goal = KineticState(0.0, (rpm / 60.0) * ENCODER_TICKS_PER_REV)
     }
 
     val stopSpin get() = startSpin(0.0).and(stopTransfer)
@@ -181,6 +176,6 @@ object FlywheelShooterSubsystem : Subsystem {
 
         val targetRpm =
             (airAndGravityCurve * (distanceInches * distanceInches)) + (linearGrowth * distanceInches) + baselineRpm
-        return targetRpm.coerceIn(0.0, MAX_MOTOR_RPM)
+        return targetRpm.coerceIn(baselineRpm, MAX_MOTOR_RPM)
     }
 }
