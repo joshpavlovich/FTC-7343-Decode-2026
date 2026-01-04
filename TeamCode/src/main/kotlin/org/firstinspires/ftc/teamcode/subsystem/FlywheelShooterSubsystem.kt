@@ -15,15 +15,16 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.powerable.SetPower
 
+private const val FLYWHEEL_DIAMETER_MULTIPLIER = 1.0367
+
 const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.50
-const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_MID_AUTO_ZONE = 0.45
-const val FLYWHEEL_MOTOR_POWER_FRONT_AUTO_LAUNCH_ZONE = 0.56
+
 const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.625
-
 const val FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE = 2600.0
-const val FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE = 3600.0
 
-const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2200.0
+const val FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE = 3600.0
+const val FLYWHEEL_MOTOR_VELOCITY_BACK_AUTO_LAUNCH_ZONE = 2400.0
+
 const val FLYWHEEL_MOTOR_VELOCITY_FRONT_AUTO_LAUNCH_ZONE = 3200.0
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
@@ -32,12 +33,12 @@ private const val KICKER_SERVO_UP_POSITION = 0.35
 private const val ENCODER_TICKS_PER_REV = 28.0
 
 // Define your motor's physical limits
-private const val MAX_VELOCITY = 4000.0 // The fastest your motor can safely spin
-private const val MIN_VELOCITY = 1714.48071 // Usually 0, or your 'c' value (1714.0)
+private const val MAX_MOTOR_RPM = 4000.0 // The fastest your motor can safely spin
+private const val MIN_MOTOR_RPM = 1714.48071 // Usually 0, or your 'c' value (1714.0)
 
 object FlywheelShooterSubsystem : Subsystem {
 
-    // TODO: Tune these values???
+    // TODO: TUNE THESE VALUES???
     private val flywheelPID = PIDCoefficients(0.008, 0.0, 0.0)
     private val flywheelFF = BasicFeedforwardParameters(0.00055, 0.0, 0.0)
 
@@ -48,13 +49,12 @@ object FlywheelShooterSubsystem : Subsystem {
 
     private lateinit var motors: MotorGroup
 
-    private lateinit var flywheelMotorLeft: MotorEx
-    private lateinit var flywheelMotorRight: MotorEx
-
+// TODO: DO WE NEED VOLTAGE COMPENSATION???
 //    private lateinit var voltageSensor: VoltageSensor
     // A nominal voltage for voltage compensation.
     // TODO: You may need to tune this value for your robot's battery.
 //    private const val NOMINAL_VOLTAGE = 12.0
+// TODO: DO WE NEED VOLTAGE COMPENSATION???
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
@@ -65,9 +65,10 @@ object FlywheelShooterSubsystem : Subsystem {
 
     override fun initialize() {
         super.initialize()
-        flywheelMotorLeft = MotorEx("flywheel_motor_left")
-        flywheelMotorRight = MotorEx("flywheel_motor_right").reversed()
-        motors = MotorGroup(flywheelMotorLeft, flywheelMotorRight)
+        motors = MotorGroup(
+            MotorEx("flywheel_motor_left"),
+            MotorEx("flywheel_motor_right").reversed()
+        )
 
         // Set the initial goal to 0 velocity.
         flywheelController.goal = KineticState(velocity = 0.0)
@@ -78,7 +79,9 @@ object FlywheelShooterSubsystem : Subsystem {
         transferServoBottomRight.power = 0.0
 
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
+// TODO: DO WE NEED VOLTAGE COMPENSATION???
 //        voltageSensor = ActiveOpMode.hardwareMap.voltageSensor.first()
+// TODO: DO WE NEED VOLTAGE COMPENSATION???
     }
 
     override fun periodic() {
@@ -95,24 +98,17 @@ object FlywheelShooterSubsystem : Subsystem {
         motors.power = motorPower //* voltageMultiplier
 
         ActiveOpMode.telemetry.addData("Flywheel Motor's Power", motors.power)
-        ActiveOpMode.telemetry.addData("Flywheel Motor Left Power", flywheelMotorLeft.power)
-        ActiveOpMode.telemetry.addData("Flywheel Motor Right Power", flywheelMotorRight.power)
-        ActiveOpMode.telemetry.addData(
-            "Target velocity:",
-            flywheelController.goal.velocity / ENCODER_TICKS_PER_REV * 60.0
-        )
-        ActiveOpMode.telemetry.addData(
-            "Flywheel Motor's Velocity",
-            motors.velocity / ENCODER_TICKS_PER_REV * 60.0
-        )
-        ActiveOpMode.telemetry.addData(
-            "Flywheel Motor Left Velocity",
-            flywheelMotorLeft.velocity / ENCODER_TICKS_PER_REV * 60.0
-        )
-        ActiveOpMode.telemetry.addData(
-            "Flywheel Motor Right Velocity",
-            flywheelMotorRight.velocity / ENCODER_TICKS_PER_REV * 60.0
-        )
+        try {
+            ActiveOpMode.telemetry.addData(
+                "Target velocity",
+                flywheelController.goal.velocity / ENCODER_TICKS_PER_REV * 60.0
+            )
+            ActiveOpMode.telemetry.addData(
+                "Flywheel Motor's Velocity",
+                motors.velocity / ENCODER_TICKS_PER_REV * 60.0
+            )
+        } catch (_: Exception) {
+        }
 
         ActiveOpMode.telemetry.addData("Kicker Servo Position", kickerServo.position)
     }
@@ -133,7 +129,7 @@ object FlywheelShooterSubsystem : Subsystem {
      * Sets the target velocity of the flywheel.
      * @param velocity The target velocity in ticks per second.
      */
-    fun startSpin(velocity: Double = 1200.0): Command = InstantCommand {
+    fun startSpin(velocity: Double): Command = InstantCommand {
         flywheelController.goal = KineticState(0.0, (velocity / 60.0) * ENCODER_TICKS_PER_REV)
     }
 
@@ -154,7 +150,6 @@ object FlywheelShooterSubsystem : Subsystem {
             SetPower(transferServoTopRight, 0.0).requires(this)
         )
 
-
     val autoStopTransfer: Command
         get() = if (transferServoBottomLeft.power > 0) {
             stopTransfer
@@ -166,7 +161,8 @@ object FlywheelShooterSubsystem : Subsystem {
         // If the sensor doesn't see the target, don't spin the motor at all
         if (distance <= 0) return 0.0
 
-        val rawVelocity = (0.0357839 * (distance * distance)) + (8.43768 * distance) + MIN_VELOCITY
-        return rawVelocity.coerceIn(MIN_VELOCITY, MAX_VELOCITY)
+        val rawVelocity =
+            ((0.0357839 * FLYWHEEL_DIAMETER_MULTIPLIER) * (distance * distance)) + ((8.43768 * FLYWHEEL_DIAMETER_MULTIPLIER) * distance) + (MIN_MOTOR_RPM * FLYWHEEL_DIAMETER_MULTIPLIER)
+        return rawVelocity.coerceIn(MIN_MOTOR_RPM, MAX_MOTOR_RPM)
     }
 }
