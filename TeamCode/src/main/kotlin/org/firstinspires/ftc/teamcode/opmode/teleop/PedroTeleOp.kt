@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop
 
+import com.bylazar.configurables.annotations.Configurable
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
@@ -21,15 +22,22 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZ
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
+@Configurable
 @TeleOp(name = "Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
+
+    companion object {
+        @JvmField
+        var configurableRpm: Double = 2000.0
+
+        @JvmField
+        var useConfigurableRpm = false
+    }
 
     private val goalPose: Pose
         get() = if (AutonomousStateManager.isRedAlliance) {
@@ -74,14 +82,6 @@ class PedroTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
 
-        Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
-        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
-
-        Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
-            FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
-        ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
-
         // TODO: DO WE NEED AN END GAME LAYER???
         Gamepads.gamepad1.ps.whenTrue {
             followDynamicPath(endGameBaseZoneParkPose)
@@ -102,8 +102,9 @@ class PedroTeleOp : NextFTCOpMode() {
 
     override fun onUpdate() {
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
-        val calculateVelocity = calculateRpm(distanceFrom)
-        FlywheelShooterSubsystem.startSpin(calculateVelocity).schedule()
+        val calculatedRpm = calculateRpm(distanceFrom)
+        val targetRpm = if (useConfigurableRpm) configurableRpm else calculatedRpm
+        FlywheelShooterSubsystem.startSpin(targetRpm).schedule()
 
         // TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING
         if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
@@ -113,10 +114,9 @@ class PedroTeleOp : NextFTCOpMode() {
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Pedro Follower isBusy", PedroComponent.follower.isBusy)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
-        ActiveOpMode.telemetry.addData("Goal pose", goalPose)
         ActiveOpMode.telemetry.addData("Distance to Goal?", distanceFrom)
-        ActiveOpMode.telemetry.addData("Calculated Velocity", calculateVelocity)
-
+        ActiveOpMode.telemetry.addData("Calculated RPM", calculatedRpm)
+        ActiveOpMode.telemetry.addData("Target RPM", targetRpm)
         ActiveOpMode.telemetry.update()
     }
 
