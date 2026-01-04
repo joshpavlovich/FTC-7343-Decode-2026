@@ -15,8 +15,6 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.powerable.SetPower
 
-private const val FLYWHEEL_DIAMETER_MULTIPLIER = 1.0367
-
 const val FLYWHEEL_MOTOR_POWER_BACK_LAUNCH_ZONE = 0.50
 
 const val FLYWHEEL_MOTOR_POWER_FRONT_LAUNCH_ZONE = 0.625
@@ -34,7 +32,6 @@ private const val ENCODER_TICKS_PER_REV = 28.0
 
 // Define your motor's physical limits
 private const val MAX_MOTOR_RPM = 4000.0 // The fastest your motor can safely spin
-private const val MIN_MOTOR_RPM = 1714.48071 // Usually 0, or your 'c' value (1714.0)
 
 object FlywheelShooterSubsystem : Subsystem {
 
@@ -48,13 +45,6 @@ object FlywheelShooterSubsystem : Subsystem {
     }
 
     private lateinit var motors: MotorGroup
-
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
-//    private lateinit var voltageSensor: VoltageSensor
-    // A nominal voltage for voltage compensation.
-    // TODO: You may need to tune this value for your robot's battery.
-//    private const val NOMINAL_VOLTAGE = 12.0
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
 
     private val kickerServo by lazy { ServoEx("kicker_servo") }
 
@@ -79,9 +69,6 @@ object FlywheelShooterSubsystem : Subsystem {
         transferServoBottomRight.power = 0.0
 
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
-//        voltageSensor = ActiveOpMode.hardwareMap.voltageSensor.first()
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
     }
 
     override fun periodic() {
@@ -89,13 +76,7 @@ object FlywheelShooterSubsystem : Subsystem {
 
         ActiveOpMode.telemetry.addData("Calculated Power", motorPower)
 
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
-//        val voltageMultiplier = NOMINAL_VOLTAGE / voltageSensor.voltage
-//        ActiveOpMode.telemetry.addData("Voltage Multiplier", voltageMultiplier)
-//        ActiveOpMode.telemetry.addData("Calculated Voltage Power", motorPower * voltageMultiplier)
-// TODO: DO WE NEED VOLTAGE COMPENSATION???
-
-        motors.power = motorPower //* voltageMultiplier
+        motors.power = motorPower
 
         ActiveOpMode.telemetry.addData("Flywheel Motor's Power", motors.power)
         try {
@@ -155,14 +136,52 @@ object FlywheelShooterSubsystem : Subsystem {
             stopTransfer
         } else NullCommand()
 
-    // https://github.com/AtomicRobotics3805/Decode/blob/leaguemeet2/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/AutoAdjustingCalc.kt
-    // Adapted from AutoAdjustingCalc.calculatePower()
-    fun calculateRpm(distance: Double): Double {
-        // If the sensor doesn't see the target, don't spin the motor at all
-        if (distance <= 0) return 0.0
 
-        val rawVelocity =
-            ((0.0357839 * FLYWHEEL_DIAMETER_MULTIPLIER) * (distance * distance)) + ((8.43768 * FLYWHEEL_DIAMETER_MULTIPLIER) * distance) + (MIN_MOTOR_RPM * FLYWHEEL_DIAMETER_MULTIPLIER)
-        return rawVelocity.coerceIn(MIN_MOTOR_RPM, MAX_MOTOR_RPM)
+    /**
+     * Calculates the target RPM for the flywheel shooter based on the distance to the target.
+     *
+     * This function uses a quadratic formula derived from real-world test data to determine the
+     * optimal flywheel speed for a given distance. The formula is in the form of `y = ax^2 + bx + c`,
+     * where:
+     * - `y` is the target RPM.
+     * - `x` is the distance in inches.
+     * - `a` (`airAndGravityCurve`) accounts for the air resistance and gravity affecting the projectile.
+     * - `b` (`linearGrowth`) provides linear scaling for the RPM as distance increases.
+     * - `c` (`baselineRpm`) is the base RPM for shooting at point-blank range.
+     *
+     * The coefficients `a`, `b`, and `c` are tuned to the specific physical characteristics of the
+     * robot's shooter mechanism.
+     *
+     * Adapted from AutoAdjustingCalc.calculatePower(): https://github.com/AtomicRobotics3805/Decode/blob/leaguemeet2/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/AutoAdjustingCalc.kt
+     *
+     * @param distanceInches The distance to the target in inches.
+     * @return The calculated target RPM for the flywheel, coerced to be within the safe operating
+     *         range of the motor (0 to `MAX_MOTOR_RPM`). Returns 0.0 if the distance is
+     *         less than or equal to 0.
+     */
+    fun calculateRpm(distanceInches: Double): Double {
+        // If the sensor doesn't see the target, don't spin the motor at all
+        if (distanceInches <= 0) return 0.0
+
+        // Shooter's quadratic formula (y = ax^2 + bx + c), each letter represents a specific physical
+        // behavior of your robot's launch system. Because we used Regression to fit the formula to your
+        // real-world test data, these values capture the "personality" of your specific flywheel,
+        // motors, and ball compression.
+        //
+        // | Coefficient | Role            | If you increase this... |
+        // |     c       | Vertical Offset | Every single shot (near and far) will go higher/further. |
+        // |     b       | Linear Scaling  | Long-range shots will increase in power much faster than close-range shots. |
+        // |     a       | Curve Shape     | "Adjusts the ""arc"" consistency for extreme distances (150""+)." |
+        // How to use this for "Quick Fixes":
+        // If all shots are low: Add +50 to your "c" value.
+        // If close shots are good, but far shots are low: Increase your "b" value slightly (e.g., from 14.28 to 14.50).
+        //
+        val airAndGravityCurve = -0.0148529 // The "a" Value: The "Air & Gravity Curve" (Curvature)
+        val linearGrowth = 14.282 // The "b" Value: The "Linear Growth" (Slope)
+        val baselineRpm = 1714.48071 // The "c" Value: The "Baseline Power" (Y-Intercept)
+
+        val targetRpm =
+            (airAndGravityCurve * (distanceInches * distanceInches)) + (linearGrowth * distanceInches) + baselineRpm
+        return targetRpm.coerceIn(0.0, MAX_MOTOR_RPM)
     }
 }
