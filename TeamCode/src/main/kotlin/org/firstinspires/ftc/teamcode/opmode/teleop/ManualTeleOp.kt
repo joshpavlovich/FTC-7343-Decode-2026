@@ -58,7 +58,7 @@ class ManualTeleOp : NextFTCOpMode() {
 
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_FRONT_LAUNCH_ZONE)
-        ) whenBecomesFalse (FlywheelShooterSubsystem.stopSpin)
+        ) whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
 
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_VELOCITY_BACK_LAUNCH_ZONE)
