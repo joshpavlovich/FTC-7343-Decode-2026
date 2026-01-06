@@ -6,6 +6,7 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import dev.nextftc.bindings.BindingManager
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.extensions.pedro.PedroComponent
@@ -22,9 +23,11 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZ
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.END_GAME_START_TIME_SECONDS
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
+private const val LAYER_ENDGAME = "endgame"
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
 @Configurable
@@ -81,6 +84,11 @@ class PedroTeleOp : NextFTCOpMode() {
 
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
+            .inLayer(LAYER_ENDGAME) {
+                whenBecomesTrue { driverControlled.scalar = 0.1 }
+                whenBecomesFalse { driverControlled.scalar = 1.0 }
+            }
+
 
         // TODO: DO WE NEED AN END GAME LAYER???
         Gamepads.gamepad1.ps.whenTrue {
@@ -101,6 +109,10 @@ class PedroTeleOp : NextFTCOpMode() {
     }
 
     override fun onUpdate() {
+        if (ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
+            BindingManager.layer = LAYER_ENDGAME
+        }
+
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculatedRpm = calculateRpm(distanceFrom)
         val targetRpm = if (useConfigurableRpm) configurableRpm else calculatedRpm
