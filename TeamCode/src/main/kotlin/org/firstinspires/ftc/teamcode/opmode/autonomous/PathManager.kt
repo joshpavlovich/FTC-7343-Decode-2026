@@ -26,6 +26,13 @@ object PathManager {
     // FIELD LOCATION POSES
     val blueGoalPose = Pose(13.0, 134.7, 110.0.deg.inRad)
 
+    val goalPose: Pose
+        get() = if (AutonomousStateManager.isRedAlliance) {
+            blueGoalPose.mirror()
+        } else {
+            blueGoalPose
+        }
+
     lateinit var frontLaunchZoneStartToPark: PathChain
     lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
     lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain

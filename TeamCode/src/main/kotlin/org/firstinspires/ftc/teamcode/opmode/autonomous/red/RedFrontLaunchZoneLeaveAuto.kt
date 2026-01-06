@@ -30,7 +30,6 @@ class RedFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
             BulkReadComponent
         )
 
-
         telemetry = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
         AutonomousStateManager.isRedAlliance = true
     }

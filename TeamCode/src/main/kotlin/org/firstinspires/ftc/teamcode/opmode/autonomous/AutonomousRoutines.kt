@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.autonomous
 import dev.nextftc.core.commands.groups.ParallelGroup
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.extensions.pedro.FollowPath
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_BACK_AUTO_LAUNCH_ZONE
-import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_FRONT_AUTO_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 object AutonomousRoutines {
@@ -16,10 +14,7 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
-            ParallelGroup(
-                FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_FRONT_AUTO_LAUNCH_ZONE),
-                FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true)
-            ),
+            FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true),
             FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
@@ -40,10 +35,7 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
-            ParallelGroup(
-                FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_BACK_AUTO_LAUNCH_ZONE),
-                FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
-            ),
+            FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
             FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),

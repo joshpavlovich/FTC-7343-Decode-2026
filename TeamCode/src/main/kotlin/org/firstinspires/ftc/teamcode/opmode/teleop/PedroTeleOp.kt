@@ -18,8 +18,8 @@ import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueBackShootingPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontShootingPose
-import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
@@ -41,13 +41,6 @@ class PedroTeleOp : NextFTCOpMode() {
         @JvmField
         var useConfigurableRpm = false
     }
-
-    private val goalPose: Pose
-        get() = if (AutonomousStateManager.isRedAlliance) {
-            blueGoalPose.mirror()
-        } else {
-            blueGoalPose
-        }
 
     init {
         addComponents(

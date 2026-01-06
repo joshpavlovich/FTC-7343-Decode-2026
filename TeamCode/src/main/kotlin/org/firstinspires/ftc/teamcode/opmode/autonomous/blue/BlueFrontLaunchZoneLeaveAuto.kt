@@ -30,7 +30,6 @@ class BlueFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
             BulkReadComponent
         )
 
-
         telemetry = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
         AutonomousStateManager.isRedAlliance = false
     }
@@ -50,7 +49,6 @@ class BlueFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
         FlywheelShooterSubsystem.stopSpin()
         AutonomousStateManager.startPoseAtEndOfAuto = PedroComponent.follower.pose
     }
-
 
     override fun onUpdate() {
         Drawing.drawDebug(PedroComponent.follower)
