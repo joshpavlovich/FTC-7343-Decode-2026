@@ -11,7 +11,7 @@ object PathManager {
 
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
     val frontLaunchZoneStartPose = Pose(56.0, 8.0, 90.deg.inRad)
-    val frontLaunchZoneShootingPose = Pose(56.0, 21.258, 112.deg.inRad)
+    val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 114.0.deg.inRad)
     val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
