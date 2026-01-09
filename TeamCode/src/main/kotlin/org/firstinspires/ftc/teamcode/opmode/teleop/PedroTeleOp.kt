@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.END_GAME_START_TIME_SECONDS
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
+import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 private const val LAYER_ENDGAME = "endgame"
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
@@ -44,7 +45,7 @@ class PedroTeleOp : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent,
             BindingsComponent
@@ -82,6 +83,8 @@ class PedroTeleOp : NextFTCOpMode() {
                 whenBecomesFalse { driverControlled.scalar = 1.0 }
             }
 
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse  whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         // TODO: DO WE NEED AN END GAME LAYER???
         Gamepads.gamepad1.ps.whenTrue {
