@@ -15,12 +15,15 @@ object PathManager {
     val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
     val backIntakeLaunchZoneShootingPose = Pose(36.5, 106.8, 135.deg.inRad)
-    val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(39.90, 84.21, 180.deg.inRad)
+    val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkControlPose = Pose(48.3, 95.79)
     val backIntakeLaunchZoneGppSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
-    val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(39.90, 59.63, 135.deg.inRad)
+    val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(42.0, 59.63, 180.deg.inRad)
     val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkControlPose = Pose(48.3, 64.6)
+    val frontLaunchZonePrePpgSpikeMarkPose = Pose(42.0, 35.5, 180.deg.inRad)
+    val frontLaunchZonePpgSpikeMarkPose = Pose(18.0, 35.5, 180.deg.inRad)
+    val frontLaunchZonePrePpgSpikeMarkControlPose = Pose(55.4, 28.8)
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 90.deg.inRad)
@@ -53,6 +56,11 @@ object PathManager {
     lateinit var backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting: PathChain
     lateinit var backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
     lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
+
+    lateinit var frontLaunchZoneShootingToPpgPreSpikeMark: PathChain
+    lateinit var frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark: PathChain
+    lateinit var frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting: PathChain
+    lateinit var frontLaunchZoneShootingToPgpPreSpikeMark: PathChain
 
     fun buildPaths(follower: Follower) {
         if (AutonomousStateManager.isRedAlliance) {
@@ -317,6 +325,44 @@ object PathManager {
                 .setLinearHeadingInterpolation(
                     backIntakeLaunchZoneShootingPose.heading,
                     backLaunchZoneParkPose.heading
+                )
+                .build()
+
+            frontLaunchZoneShootingToPpgPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        frontLaunchZoneShootingPose,
+                        frontLaunchZonePrePpgSpikeMarkPose,
+                        frontLaunchZonePrePpgSpikeMarkControlPose
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneShootingPose.heading,
+                    frontLaunchZonePrePpgSpikeMarkPose.heading
+                )
+                .build()
+
+            frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePrePpgSpikeMarkPose, frontLaunchZonePpgSpikeMarkPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePrePpgSpikeMarkPose.heading,
+                    backIntakeLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePpgSpikeMarkPose, frontLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePpgSpikeMarkPose.heading,
+                    frontLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            frontLaunchZoneShootingToPgpPreSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePpgSpikeMarkPose, frontLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePpgSpikeMarkPose.heading,
+                    frontLaunchZoneShootingPose.heading
                 )
                 .build()
         }

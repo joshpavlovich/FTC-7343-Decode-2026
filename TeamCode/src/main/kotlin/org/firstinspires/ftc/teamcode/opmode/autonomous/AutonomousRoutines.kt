@@ -75,20 +75,22 @@ object AutonomousRoutines {
 
             FollowPath(PathManager.backIntakeLaunchZoneShootingToGppPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            ParallelGroup(
-                IntakeSubsystem.forward,
-                FollowPath(PathManager.backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark, true),
-            ),
+            IntakeSubsystem.forward,
+            FollowPath(PathManager.backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark, true, 0.5),
             ParallelGroup(
                 IntakeSubsystem.stop,
-                FollowPath(PathManager.backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting, true),
+                FollowPath(
+                    PathManager.backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting,
+                    true
+                ),
             ),
 
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FlywheelShooterSubsystem.kickArtifact,
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Add a backup kick in case the first kick doesn't work
             FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
@@ -96,20 +98,22 @@ object AutonomousRoutines {
 
             FollowPath(PathManager.backIntakeLaunchZoneShootingToPgpPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            ParallelGroup(
-                IntakeSubsystem.forward,
-                FollowPath(PathManager.backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark, true),
-            ),
+            IntakeSubsystem.forward,
+            FollowPath(PathManager.backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark, true),
             ParallelGroup(
                 IntakeSubsystem.stop,
-                FollowPath(PathManager.backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting, true),
+                FollowPath(
+                    PathManager.backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting,
+                    true
+                ),
             ),
 
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FlywheelShooterSubsystem.kickArtifact,
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Add a backup kick in case the first kick doesn't work
             FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
@@ -120,6 +124,6 @@ object AutonomousRoutines {
             ParallelGroup(
                 FollowPath(PathManager.backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark, true),
                 FlywheelShooterSubsystem.stopSpin
-            ).afterTime(3.0)
+            )
         )
 }

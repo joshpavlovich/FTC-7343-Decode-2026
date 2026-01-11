@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
+import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 @Autonomous(
     name = "\uD83D\uDFE6 Blue Back Intake Launch Zone Shoot Auto",
@@ -27,7 +28,7 @@ class BlueBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
