@@ -8,6 +8,7 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 
+@Disabled
 @TeleOp(name = "TeleOp Color Sensor Tester")
 class TeleOpColorSensorTester : NextFTCOpMode() {
     init {

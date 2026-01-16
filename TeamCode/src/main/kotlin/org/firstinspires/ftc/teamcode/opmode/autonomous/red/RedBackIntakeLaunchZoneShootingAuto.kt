@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.autonomous.red
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.extensions.pedro.PedroComponent
 import dev.nextftc.ftc.ActiveOpMode
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
+@Disabled
 @Autonomous(
     name = "\uD83D\uDFE6 Red Back Intake Launch Zone Shoot Auto",
     group = "Red Alliance",
