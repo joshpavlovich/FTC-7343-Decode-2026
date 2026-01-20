@@ -32,6 +32,7 @@ object PathManager {
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
     val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
     val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
+    val blueGoalGatePose = Pose(30.0, 65.0, 90.deg.inRad)
 
     // FIELD LOCATION POSES
     val blueGoalPose = Pose(13.0, 134.7, 110.0.deg.inRad)

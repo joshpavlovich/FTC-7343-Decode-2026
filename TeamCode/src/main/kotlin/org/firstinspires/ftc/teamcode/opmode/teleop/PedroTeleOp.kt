@@ -18,6 +18,7 @@ import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueBackShootingPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontShootingPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalGatePose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
@@ -97,6 +98,10 @@ class PedroTeleOp : NextFTCOpMode() {
 
         Gamepads.gamepad1.triangle.whenTrue {
             followDynamicPath(blueBackShootingPose)
+        }
+
+        Gamepads.gamepad1.square.whenTrue {
+            followDynamicPath(blueGoalGatePose)
         }
     }
 
