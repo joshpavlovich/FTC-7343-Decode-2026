@@ -29,9 +29,13 @@ object PathManager {
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 90.deg.inRad)
 
     // TELEOP POSES
+    //Goes to Parking Square
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
+    //Goes to closer shooting zone
     val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
+    //Goes to far shooing zone
     val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
+    //Goes to gate
     val blueGoalGatePose = Pose(30.0, 65.0, 90.deg.inRad)
 
     // FIELD LOCATION POSES
