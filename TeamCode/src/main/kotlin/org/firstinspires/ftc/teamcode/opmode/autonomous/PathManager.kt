@@ -36,10 +36,10 @@ object PathManager {
     //Goes to far shooing zone
     val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
     //Goes to gate
-    val blueGoalGatePose = Pose(30.0, 65.0, 90.deg.inRad)
+    val blueGoalGatePose = Pose(30.0, 67.0, 90.deg.inRad)
 
     // FIELD LOCATION POSES
-    val blueGoalPose = Pose(13.0, 134.7, 110.0.deg.inRad)
+    val blueGoalPose = Pose(9.0, 134.7, 110.0.deg.inRad)
 
     val goalPose: Pose
         get() = if (AutonomousStateManager.isRedAlliance) {
