@@ -24,7 +24,6 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
-import org.firstinspires.ftc.teamcode.subsystem.END_GAME_START_TIME_SECONDS
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
@@ -78,11 +77,11 @@ class PedroTeleOp : NextFTCOpMode() {
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
 
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
-            .inLayer(LAYER_ENDGAME) {
-                whenBecomesTrue { driverControlled.scalar = 0.1 }
-                whenBecomesFalse { driverControlled.scalar = 1.0 }
-            }
+            .whenBecomesTrue { driverControlled.scalar = 0.1 }
+            .whenBecomesFalse { driverControlled.scalar = 1.0 }
+//            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
+//            .inLayer(LAYER_ENDGAME) {
+//            }
 
         Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse  whenBecomesFalse IntakeSubsystem.stop
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
@@ -110,9 +109,9 @@ class PedroTeleOp : NextFTCOpMode() {
     }
 
     override fun onUpdate() {
-        if (ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
-            BindingManager.layer = LAYER_ENDGAME
-        }
+//        if (ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
+//            BindingManager.layer = LAYER_ENDGAME
+//        }
 
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculatedRpm = calculateRpm(distanceFrom)
