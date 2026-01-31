@@ -32,7 +32,7 @@ private const val LAYER_ENDGAME = "endgame"
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
 @Configurable
-@TeleOp(name = "Pedro TeleOp")
+@TeleOp(name = "\uD83D\uDC25\" Pedro TeleOp")
 class PedroTeleOp : NextFTCOpMode() {
 
     companion object {
