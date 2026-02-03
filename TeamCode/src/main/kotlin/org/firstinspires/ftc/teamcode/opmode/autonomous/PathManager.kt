@@ -26,7 +26,7 @@ object PathManager {
     val frontLaunchZonePrePpgSpikeMarkControlPose = Pose(55.4, 28.8)
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
-    val backLaunchZoneParkPose = Pose(42.0, 72.0, 90.deg.inRad)
+    val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
 
     // TELEOP POSES
     //Goes to Parking Square
@@ -36,7 +36,7 @@ object PathManager {
     //Goes to far shooing zone
     val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
     //Goes to gate
-    val blueGoalGatePose = Pose(30.0, 67.0, 90.deg.inRad)
+    val blueGoalGatePose = Pose(30.0, 67.0, 270.deg.inRad)
 
     // FIELD LOCATION POSES
     val blueGoalPose = Pose(9.0, 134.7, 110.0.deg.inRad)
