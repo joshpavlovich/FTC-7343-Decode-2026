@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousRoutines
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
+import org.firstinspires.ftc.teamcode.opmode.teleop.PEDRO_TELE_OP
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 @Autonomous(
     name = "\uD83D\uDFE6 Blue Back Intake Launch Zone Shoot Auto",
     group = "Blue Alliance",
-    preselectTeleOp = "Pedro TeleOp"
+    preselectTeleOp = PEDRO_TELE_OP
 )
 class BlueBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
 

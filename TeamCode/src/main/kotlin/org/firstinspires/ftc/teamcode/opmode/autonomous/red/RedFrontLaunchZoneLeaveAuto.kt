@@ -11,6 +11,7 @@ import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousRoutines
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager
+import org.firstinspires.ftc.teamcode.opmode.teleop.PEDRO_TELE_OP
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 @Autonomous(
     name = "\uD83D\uDFE5 Red Leave Auto",
     group = "Red Alliance",
-    preselectTeleOp = "Pedro TeleOp"
+    preselectTeleOp = PEDRO_TELE_OP
 )
 class RedFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
 
