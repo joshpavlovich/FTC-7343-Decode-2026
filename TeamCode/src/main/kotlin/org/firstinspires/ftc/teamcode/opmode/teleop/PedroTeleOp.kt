@@ -6,11 +6,14 @@ import com.bylazar.telemetry.PanelsTelemetry
 import com.pedropathing.geometry.BezierLine
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import dev.nextftc.bindings.BindingManager
+import dev.nextftc.core.commands.groups.SequentialGroup
+import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
+import dev.nextftc.core.units.Angle
 import dev.nextftc.extensions.pedro.PedroComponent
 import dev.nextftc.extensions.pedro.PedroDriverControlled
+import dev.nextftc.extensions.pedro.TurnBy
 import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
@@ -27,12 +30,15 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
+import kotlin.math.atan2
 
 private const val LAYER_ENDGAME = "endgame"
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
+const val PEDRO_TELE_OP = "\uD83D\uDC25\" Pedro TeleOp"
+
 @Configurable
-@TeleOp(name = "\uD83D\uDC25\" Pedro TeleOp")
+@TeleOp(name = PEDRO_TELE_OP)
 class PedroTeleOp : NextFTCOpMode() {
 
     companion object {
@@ -83,7 +89,7 @@ class PedroTeleOp : NextFTCOpMode() {
 //            .inLayer(LAYER_ENDGAME) {
 //            }
 
-        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse  whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         // TODO: DO WE NEED AN END GAME LAYER???
@@ -102,6 +108,11 @@ class PedroTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.square.whenTrue {
             followDynamicPath(blueGoalGatePose)
         }
+
+// TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING TURN TO GOAL WITH 1 SECOND DELAY
+//        Gamepads.gamepad1.dpadDown.whenTrue {
+//            turnToGoal()
+//        }
     }
 
     override fun onStop() {
@@ -118,7 +129,6 @@ class PedroTeleOp : NextFTCOpMode() {
         val targetRpm = if (useConfigurableRpm) configurableRpm else calculatedRpm
         FlywheelShooterSubsystem.startSpin(targetRpm).schedule()
 
-        // TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING
         if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
             PedroComponent.follower.startTeleOpDrive()
         }
@@ -154,6 +164,56 @@ class PedroTeleOp : NextFTCOpMode() {
             }
 
             PedroComponent.follower.followPath(path, true)
+        }
+    }
+
+    /**
+     * Calculates the relative bearing to any target goal.
+     * @param robotPose The current pose of the robot (from follower.pose)
+     * @param goalPose The static pose of the target goal
+     * @return The relative turn needed in DEGREES [-180, 180]
+     */
+    fun getRelativeBearing(robotPose: Pose, goalPose: Pose): Double {
+        // 1. Calculate the absolute field angle from robot to goal
+        val deltaX = goalPose.x - robotPose.x
+        val deltaY = goalPose.y - robotPose.y
+        val fieldTargetAngleRad = atan2(deltaY, deltaX)
+
+        // 2. Convert angles to degrees for easier logic/normalization
+        val robotHeadingDeg = Math.toDegrees(robotPose.heading)
+        val fieldTargetAngleDeg = Math.toDegrees(fieldTargetAngleRad)
+
+        // 3. Calculate relative turn
+        var relativeTurn = fieldTargetAngleDeg - robotHeadingDeg
+
+        // 4. Normalize to the shortest path
+        while (relativeTurn > 180) relativeTurn -= 360.0
+        while (relativeTurn <= -180) relativeTurn += 360.0
+
+        return relativeTurn
+    }
+
+    /**
+     * Rotates the robot to face the target goal.
+     *
+     * This method calculates the required relative bearing from the current robot pose
+     * to the [goalPose] and initiates a turn using [TurnBy] if the robot is not already
+     * in the middle of a turn.
+     */
+    private fun turnToGoal() {
+        ActiveOpMode.telemetry.addData("turnToGoal", PedroComponent.follower.isBusy)
+        if (!PedroComponent.follower.isBusy) {
+            val relativeBearing = getRelativeBearing(
+                robotPose = PedroComponent.follower.pose,
+                goalPose = goalPose
+            )
+
+            ActiveOpMode.telemetry.addData("relativeBearing", relativeBearing)
+
+            SequentialGroup(
+                TurnBy(Angle.fromDeg(relativeBearing)),
+                InstantCommand({ PedroComponent.follower.startTeleOpDrive() }).afterTime(1.0)
+            ).schedule()
         }
     }
 }
