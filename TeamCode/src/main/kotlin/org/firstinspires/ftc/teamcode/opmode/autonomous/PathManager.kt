@@ -31,6 +31,8 @@ object PathManager {
     // TELEOP POSES
     //Goes to Parking Square
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
+    //Goes to back shooting zone close to the wall
+    val blueBackWallShootingPose = Pose(60.0, 129.5, 179.deg.inRad)
     //Goes to closer shooting zone
     val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
     //Goes to far shooing zone

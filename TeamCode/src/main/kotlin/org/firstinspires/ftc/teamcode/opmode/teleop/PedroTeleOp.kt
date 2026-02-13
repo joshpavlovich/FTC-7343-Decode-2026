@@ -11,6 +11,7 @@ import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.core.units.Angle
+import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent
 import dev.nextftc.extensions.pedro.PedroDriverControlled
 import dev.nextftc.extensions.pedro.TurnBy
@@ -20,6 +21,7 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.opmode.autonomous.AutonomousStateManager
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueBackShootingPose
+import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueBackWallShootingPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontShootingPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalGatePose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
@@ -35,7 +37,7 @@ import kotlin.math.atan2
 private const val LAYER_ENDGAME = "endgame"
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
-const val PEDRO_TELE_OP = "\uD83D\uDC25\" Pedro TeleOp"
+const val PEDRO_TELE_OP = "\uD83D\uDC25 Pedro TeleOp"
 
 @Configurable
 @TeleOp(name = PEDRO_TELE_OP)
@@ -105,6 +107,10 @@ class PedroTeleOp : NextFTCOpMode() {
             followDynamicPath(blueBackShootingPose)
         }
 
+        Gamepads.gamepad1.dpadDown.whenTrue {
+            followDynamicPath(blueBackWallShootingPose)
+        }
+
         Gamepads.gamepad1.square.whenTrue {
             followDynamicPath(blueGoalGatePose)
         }
@@ -163,7 +169,7 @@ class PedroTeleOp : NextFTCOpMode() {
                     .build()
             }
 
-            PedroComponent.follower.followPath(path, true)
+            FollowPath(path, true).schedule()
         }
     }
 
