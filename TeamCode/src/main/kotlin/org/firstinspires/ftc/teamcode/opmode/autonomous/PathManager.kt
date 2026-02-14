@@ -27,6 +27,9 @@ object PathManager {
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
+    val frontLaunchZoneStraifStartPose = Pose(56.0, 8.0, 180.deg.inRad)
+    val backLaunchZoneWallPose = Pose(60.0, 129.5, 180.deg.inRad)
+    val backLaunchZoneWallParkPose = Pose(60.0, 55.0, 0.deg.inRad)
 
     // TELEOP POSES
     //Goes to Parking Square
@@ -63,7 +66,6 @@ object PathManager {
     lateinit var backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting: PathChain
     lateinit var backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
     lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
-
     lateinit var frontLaunchZoneShootingToPpgPreSpikeMark: PathChain
     lateinit var frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark: PathChain
     lateinit var frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting: PathChain
