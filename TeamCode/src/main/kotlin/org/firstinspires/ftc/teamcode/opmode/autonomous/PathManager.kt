@@ -27,9 +27,9 @@ object PathManager {
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
-    val frontLaunchZoneStraifStartPose = Pose(56.0, 8.0, 180.deg.inRad)
-    val backLaunchZoneWallPose = Pose(60.0, 129.5, 180.deg.inRad)
-    val backLaunchZoneWallParkPose = Pose(60.0, 55.0, 0.deg.inRad)
+    val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
+    val backLaunchZoneWallShootingPose = Pose(60.0, 129.5, 180.deg.inRad)
+    val backLaunchZoneWallParkPose = Pose(60.0, 42.0, 340.deg.inRad)
 
     // TELEOP POSES
     //Goes to Parking Square
@@ -56,6 +56,8 @@ object PathManager {
     lateinit var frontLaunchZoneStartToPark: PathChain
     lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
     lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain
+    lateinit var frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting: PathChain
+    lateinit var backLaunchZoneWallShootingToBackLaunchZoneWallPark: PathChain
     lateinit var backLaunchZoneStartToBackLaunchZoneShooting: PathChain
     lateinit var backLaunchZoneStartToBackIntakeLaunchZoneShooting: PathChain
     lateinit var backIntakeLaunchZoneShootingToGppPreSpikeMark: PathChain
@@ -212,6 +214,22 @@ object PathManager {
                 .setLinearHeadingInterpolation(
                     backIntakeLaunchZoneShootingPose.mirror().heading,
                     backLaunchZoneParkPose.mirror().heading
+                )
+                .build()
+
+            frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose.mirror(), blueBackWallShootingPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneStrafeStartPose.mirror().heading,
+                    blueBackWallShootingPose.mirror().heading
+                )
+                .build()
+
+            backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
+                .addPath(BezierLine(blueBackWallShootingPose.mirror(), backLaunchZoneWallParkPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    blueBackWallShootingPose.mirror().heading,
+                    backLaunchZoneWallParkPose.mirror().heading
                 )
                 .build()
         } else {
@@ -372,6 +390,23 @@ object PathManager {
                 .setLinearHeadingInterpolation(
                     frontLaunchZonePpgSpikeMarkPose.heading,
                     frontLaunchZoneShootingPose.heading
+                )
+                .build()
+
+
+            frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose, blueBackWallShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneStrafeStartPose.heading,
+                    blueBackWallShootingPose.heading
+                )
+                .build()
+
+            backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
+                .addPath(BezierLine(blueBackWallShootingPose, backLaunchZoneWallParkPose))
+                .setLinearHeadingInterpolation(
+                    blueBackWallShootingPose.heading,
+                    backLaunchZoneWallParkPose.heading
                 )
                 .build()
         }
