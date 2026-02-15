@@ -34,6 +34,28 @@ object AutonomousRoutines {
             ).afterTime(3.0)
         )
 
+    val frontLaunchZoneStrafeStartWallShootingAutoRoutine
+        get() = SequentialGroup(
+            // Starting at the front launch zone going to the back launch zone wall shooting and
+            // starting flywheel motor leading into shooting
+            FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            // Add a backup kick in case the first kick doesn't work
+            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
+            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
+            // Go from the back launch zone wall shooting to outside the launch zone tape in order
+            // to get leave points turning to the loading zone
+            ParallelGroup(
+                FollowPath(PathManager.backLaunchZoneWallShootingToBackLaunchZoneWallPark, true),
+                FlywheelShooterSubsystem.stopSpin
+            ).afterTime(3.0)
+        )
+
     val backLaunchMidShootingAutoRoutine
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
