@@ -17,7 +17,7 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
-            FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true),
+            FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true, 0.6),
             FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
@@ -38,7 +38,7 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the back launch zone wall shooting and
             // starting flywheel motor leading into shooting
-            FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true),
+            FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true, 0.7),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
             FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
