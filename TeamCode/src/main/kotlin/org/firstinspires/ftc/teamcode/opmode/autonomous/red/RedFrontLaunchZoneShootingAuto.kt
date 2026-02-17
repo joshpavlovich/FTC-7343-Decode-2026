@@ -19,6 +19,10 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 
+/**
+ * Autonomous OpMode for the Red Alliance that starts in the front launch zone,
+ * moves to a shooting position, and launches artifacts.
+ */
 @Autonomous(
     name = "\uD83D\uDFE5 Red Front Launch Zone Shoot Auto",
     group = "Red Alliance",
@@ -37,6 +41,9 @@ class RedFrontLaunchZoneShootingAuto : NextFTCOpMode() {
         AutonomousStateManager.isRedAlliance = true
     }
 
+    /**
+     * Initializes paths and sets the starting pose for the front launch zone.
+     */
     override fun onInit() {
         PathManager.buildPaths(PedroComponent.follower)
         PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStartPose.mirror())
@@ -44,15 +51,25 @@ class RedFrontLaunchZoneShootingAuto : NextFTCOpMode() {
         Drawing.init()
     }
 
+    /**
+     * Executes the front launch shooting routine on start.
+     */
     override fun onStartButtonPressed() {
         AutonomousRoutines.frontLaunchShootingAutoRoutine()
     }
 
+    /**
+     * Stops the flywheel and records the final pose for TeleOp.
+     */
     override fun onStop() {
         FlywheelShooterSubsystem.stopSpin()
         AutonomousStateManager.startPoseAtEndOfAuto = PedroComponent.follower.pose
     }
 
+    /**
+     * Continuously calculates the required RPM based on distance to the goal
+     * and updates telemetry/debug visuals.
+     */
     override fun onUpdate() {
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculatedRpm = calculateRpm(distanceFrom)

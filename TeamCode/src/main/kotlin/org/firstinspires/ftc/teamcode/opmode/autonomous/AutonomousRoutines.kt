@@ -8,11 +8,23 @@ import dev.nextftc.extensions.pedro.PedroComponent
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
+/**
+ * AutonomousRoutines contains a collection of predefined autonomous command groups.
+ * These routines define the sequence of actions the robot performs during the autonomous period,
+ * such as following paths, shooting artifacts, and intaking from spike marks.
+ */
 object AutonomousRoutines {
 
+    /**
+     * A simple routine that leaves the front launch zone and parks.
+     */
     val frontLaunchZoneLeaveParkAutoRoutine
         get() = SequentialGroup(FollowPath(PathManager.frontLaunchZoneStartToPark, true))
 
+    /**
+     * A routine that starts at the front launch zone, moves to a shooting position,
+     * launches multiple artifacts, and then moves to a parking position.
+     */
     val frontLaunchShootingAutoRoutine
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
@@ -34,6 +46,10 @@ object AutonomousRoutines {
             ).afterTime(3.0)
         )
 
+    /**
+     * A routine that starts at the front launch zone, strafes to a back wall shooting position,
+     * launches artifacts, and then parks near the wall.
+     */
     val frontLaunchZoneStrafeStartWallShootingAutoRoutine
         get() = SequentialGroup(
             // Starting at the front launch zone going to the back launch zone wall shooting and
@@ -56,6 +72,10 @@ object AutonomousRoutines {
             ).afterTime(3.0)
         )
 
+    /**
+     * A routine that starts at the back launch zone, moves to a mid-field shooting position,
+     * launches artifacts, and then parks.
+     */
     val backLaunchMidShootingAutoRoutine
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
@@ -78,6 +98,10 @@ object AutonomousRoutines {
             ).afterTime(3.0)
         )
 
+    /**
+     * A complex routine that starts at the back launch zone, shoots, then proceeds to intake
+     * artifacts from multiple spike marks and shoot them, before finally parking.
+     */
     val backLaunchIntakeShootingAutoRoutine
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and

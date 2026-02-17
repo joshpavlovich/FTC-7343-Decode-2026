@@ -17,6 +17,10 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
+/**
+ * Autonomous OpMode for the Red Alliance that starts in the front launch zone,
+ * leaves the zone to score points, and parks.
+ */
 @Autonomous(
     name = "\uD83D\uDFE5 Red Leave Auto",
     group = "Red Alliance",
@@ -35,6 +39,9 @@ class RedFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
         AutonomousStateManager.isRedAlliance = true
     }
 
+    /**
+     * Initializes the paths and sets the starting pose for the robot.
+     */
     override fun onInit() {
         PathManager.buildPaths(PedroComponent.follower)
         PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStartPose.mirror())
@@ -42,16 +49,24 @@ class RedFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
         Drawing.init()
     }
 
+    /**
+     * Starts the leave and park autonomous routine when the start button is pressed.
+     */
     override fun onStartButtonPressed() {
         AutonomousRoutines.frontLaunchZoneLeaveParkAutoRoutine()
     }
 
+    /**
+     * Cleans up subsystems and saves the final robot pose for TeleOp when the OpMode stops.
+     */
     override fun onStop() {
         FlywheelShooterSubsystem.stopSpin()
         AutonomousStateManager.startPoseAtEndOfAuto = PedroComponent.follower.pose
     }
 
-
+    /**
+     * Updates telemetry and debug drawings during the OpMode execution.
+     */
     override fun onUpdate() {
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)

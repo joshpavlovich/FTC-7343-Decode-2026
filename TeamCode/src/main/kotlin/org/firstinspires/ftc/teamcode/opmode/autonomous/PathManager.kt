@@ -7,6 +7,10 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import dev.nextftc.core.units.deg
 
+/**
+ * PathManager is responsible for defining all the robot's poses and paths used during autonomous.
+ * It manages both Blue and Red alliance paths by mirroring the base Blue alliance coordinates.
+ */
 object PathManager {
 
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
@@ -46,6 +50,9 @@ object PathManager {
     // FIELD LOCATION POSES
     val blueGoalPose = Pose(9.0, 134.7, 110.0.deg.inRad)
 
+    /**
+     * Gets the goal pose based on the current alliance.
+     */
     val goalPose: Pose
         get() = if (AutonomousStateManager.isRedAlliance) {
             blueGoalPose.mirror()
@@ -73,6 +80,12 @@ object PathManager {
     lateinit var frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting: PathChain
     lateinit var frontLaunchZoneShootingToPgpPreSpikeMark: PathChain
 
+    /**
+     * Builds all path chains based on the current alliance state.
+     * This should be called during the initialization phase of an OpMode.
+     *
+     * @param follower The Pedro Pathing follower instance used to build the paths.
+     */
     fun buildPaths(follower: Follower) {
         if (AutonomousStateManager.isRedAlliance) {
             frontLaunchZoneStartToPark = follower.pathBuilder()
