@@ -10,8 +10,8 @@ import dev.nextftc.core.units.deg
 object PathManager {
 
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
-    val frontLaunchZoneStartPose = Pose(56.0, 8.0, 90.deg.inRad)
-    val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 114.0.deg.inRad)
+    val frontLaunchZoneStartPose = Pose(57.0, 9.0, 90.deg.inRad)
+    val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 113.0.deg.inRad)
     val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
     val backIntakeLaunchZoneShootingPose = Pose(36.5, 106.8, 135.deg.inRad)
@@ -28,14 +28,14 @@ object PathManager {
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
     val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
-    val backLaunchZoneWallShootingPose = Pose(60.0, 129.5, 180.deg.inRad)
+    val backLaunchZoneWallShootingPose = Pose(50.0, 132.0, 178.deg.inRad)
     val backLaunchZoneWallParkPose = Pose(60.0, 42.0, 340.deg.inRad)
 
     // TELEOP POSES
     //Goes to Parking Square
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
     //Goes to back shooting zone close to the wall
-    val blueBackWallShootingPose = Pose(60.0, 129.5, 179.deg.inRad)
+    val blueBackWallShootingPose = Pose(60.0, 128.5, 178.deg.inRad)
     //Goes to closer shooting zone
     val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
     //Goes to far shooing zone
@@ -218,17 +218,17 @@ object PathManager {
                 .build()
 
             frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
-                .addPath(BezierLine(frontLaunchZoneStrafeStartPose.mirror(), blueBackWallShootingPose.mirror()))
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose.mirror(), backLaunchZoneWallShootingPose.mirror()))
                 .setLinearHeadingInterpolation(
                     frontLaunchZoneStrafeStartPose.mirror().heading,
-                    blueBackWallShootingPose.mirror().heading
+                    backLaunchZoneWallShootingPose.mirror().heading
                 )
                 .build()
 
             backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
-                .addPath(BezierLine(blueBackWallShootingPose.mirror(), backLaunchZoneWallParkPose.mirror()))
+                .addPath(BezierLine(backLaunchZoneWallShootingPose.mirror(), backLaunchZoneWallParkPose.mirror()))
                 .setLinearHeadingInterpolation(
-                    blueBackWallShootingPose.mirror().heading,
+                    backLaunchZoneWallShootingPose.mirror().heading,
                     backLaunchZoneWallParkPose.mirror().heading
                 )
                 .build()
@@ -395,17 +395,17 @@ object PathManager {
 
 
             frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
-                .addPath(BezierLine(frontLaunchZoneStrafeStartPose, blueBackWallShootingPose))
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose, backLaunchZoneWallShootingPose))
                 .setLinearHeadingInterpolation(
                     frontLaunchZoneStrafeStartPose.heading,
-                    blueBackWallShootingPose.heading
+                    backLaunchZoneWallShootingPose.heading
                 )
                 .build()
 
             backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
-                .addPath(BezierLine(blueBackWallShootingPose, backLaunchZoneWallParkPose))
+                .addPath(BezierLine(backLaunchZoneWallShootingPose, backLaunchZoneWallParkPose))
                 .setLinearHeadingInterpolation(
-                    blueBackWallShootingPose.heading,
+                    backLaunchZoneWallShootingPose.heading,
                     backLaunchZoneWallParkPose.heading
                 )
                 .build()
