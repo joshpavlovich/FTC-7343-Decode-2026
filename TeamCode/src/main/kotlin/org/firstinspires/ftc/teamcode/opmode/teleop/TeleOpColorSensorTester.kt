@@ -8,6 +8,11 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 
+/**
+ * A testing OpMode for the [ColorSensorSubsystem].
+ * This OpMode initializes the color sensor subsystem and related components
+ * to verify their functionality and monitor sensor readings.
+ */
 @Disabled
 @TeleOp(name = "TeleOp Color Sensor Tester")
 class TeleOpColorSensorTester : NextFTCOpMode() {

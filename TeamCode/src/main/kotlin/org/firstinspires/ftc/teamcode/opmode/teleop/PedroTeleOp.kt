@@ -39,14 +39,25 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
 const val PEDRO_TELE_OP = "\uD83D\uDC25 Pedro TeleOp"
 
+/**
+ * PedroTeleOp is a feature-rich TeleOp OpMode that utilizes the Pedro Pathing library.
+ * It provides driver-controlled movement with the ability to trigger automated paths
+ * to various field positions (e.g., shooting zones, parking) and automated aiming.
+ */
 @Configurable
 @TeleOp(name = PEDRO_TELE_OP)
 class PedroTeleOp : NextFTCOpMode() {
 
     companion object {
+        /**
+         * A manually configurable RPM value for the flywheel, adjustable via a dashboard.
+         */
         @JvmField
         var configurableRpm: Double = 2000.0
 
+        /**
+         * Flag to toggle between calculated RPM (based on distance) and the [configurableRpm].
+         */
         @JvmField
         var useConfigurableRpm = false
     }
@@ -62,6 +73,9 @@ class PedroTeleOp : NextFTCOpMode() {
         telemetry = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
     }
 
+    /**
+     * Initializes the robot's pose based on the state saved at the end of the autonomous period.
+     */
     override fun onInit() {
         super.onInit()
 
@@ -70,9 +84,13 @@ class PedroTeleOp : NextFTCOpMode() {
         Drawing.init()
     }
 
+    /**
+     * Sets up driver controls and automated path bindings when the start button is pressed.
+     */
     override fun onStartButtonPressed() {
         resetRuntime()
 
+        // Primary driver control for movement
         val driverControlled = PedroDriverControlled(
             drivePower = -Gamepads.gamepad1.leftStickY,
             strafePower = -Gamepads.gamepad1.leftStickX,
@@ -80,21 +98,21 @@ class PedroTeleOp : NextFTCOpMode() {
         )
         driverControlled()
 
+        // Kicker controls
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
 
+        // Precision mode (slow speed) while holding Left Trigger
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue { driverControlled.scalar = 0.1 }
             .whenBecomesFalse { driverControlled.scalar = 1.0 }
-//            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
-//            .inLayer(LAYER_ENDGAME) {
-//            }
 
+        // Intake controls
         Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
-        // TODO: DO WE NEED AN END GAME LAYER???
+        // Automated path bindings
         Gamepads.gamepad1.ps.whenTrue {
             followDynamicPath(endGameBaseZoneParkPose)
         }
@@ -114,27 +132,26 @@ class PedroTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.square.whenTrue {
             followDynamicPath(blueGoalGatePose)
         }
-
-// TODO: TEST BREAK OUT OF PEDRO PATH FOLLOWING TURN TO GOAL WITH 1 SECOND DELAY
-//        Gamepads.gamepad1.dpadDown.whenTrue {
-//            turnToGoal()
-//        }
     }
 
+    /**
+     * Ensures the flywheel stops spinning when the OpMode is stopped.
+     */
     override fun onStop() {
         FlywheelShooterSubsystem.stopSpin()
     }
 
+    /**
+     * Continuously updates the flywheel RPM, manages the transition between automated paths and
+     * teleop driving, and updates telemetry and debug visuals.
+     */
     override fun onUpdate() {
-//        if (ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS) {
-//            BindingManager.layer = LAYER_ENDGAME
-//        }
-
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
         val calculatedRpm = calculateRpm(distanceFrom)
         val targetRpm = if (useConfigurableRpm) configurableRpm else calculatedRpm
         FlywheelShooterSubsystem.startSpin(targetRpm).schedule()
 
+        // Return control to the driver if a path has finished or was never started
         if (!PedroComponent.follower.teleopDrive && !PedroComponent.follower.isBusy) {
             PedroComponent.follower.startTeleOpDrive()
         }
@@ -148,6 +165,12 @@ class PedroTeleOp : NextFTCOpMode() {
         ActiveOpMode.telemetry.update()
     }
 
+    /**
+     * Generates and executes a path from the current pose to a specified target pose,
+     * accounting for alliance color (mirroring).
+     *
+     * @param pose The target pose to follow.
+     */
     private fun followDynamicPath(pose: Pose) {
         if (!PedroComponent.follower.isBusy) {
             val currentPose = PedroComponent.follower.pose
@@ -174,10 +197,11 @@ class PedroTeleOp : NextFTCOpMode() {
     }
 
     /**
-     * Calculates the relative bearing to any target goal.
-     * @param robotPose The current pose of the robot (from follower.pose)
-     * @param goalPose The static pose of the target goal
-     * @return The relative turn needed in DEGREES [-180, 180]
+     * Calculates the relative bearing (in degrees) from the robot's current pose to a target goal pose.
+     *
+     * @param robotPose The current pose of the robot.
+     * @param goalPose The static pose of the target goal.
+     * @return The relative turn needed in degrees within the range [-180, 180].
      */
     fun getRelativeBearing(robotPose: Pose, goalPose: Pose): Double {
         // 1. Calculate the absolute field angle from robot to goal
@@ -203,8 +227,7 @@ class PedroTeleOp : NextFTCOpMode() {
      * Rotates the robot to face the target goal.
      *
      * This method calculates the required relative bearing from the current robot pose
-     * to the [goalPose] and initiates a turn using [TurnBy] if the robot is not already
-     * in the middle of a turn.
+     * to the [goalPose] and initiates a turn using [TurnBy].
      */
     private fun turnToGoal() {
         ActiveOpMode.telemetry.addData("turnToGoal", PedroComponent.follower.isBusy)

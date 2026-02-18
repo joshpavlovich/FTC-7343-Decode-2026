@@ -16,6 +16,10 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.3
 
+/**
+ * A testing OpMode for the FlywheelShooterSubsystem.
+ * Provides manual control over the flywheel velocity and kicker servo for verification and tuning.
+ */
 @Disabled
 @TeleOp(name = "TeleOp Shooter Tester")
 class TeleOpFlywheelShooterTester : NextFTCOpMode() {
@@ -29,6 +33,12 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
         telemetry = JoinedTelemetry(PanelsTelemetry.ftcTelemetry, telemetry)
     }
 
+    /**
+     * Binds gamepad buttons to shooter actions:
+     * - Right Trigger: Activates the kicker mechanism.
+     * - Circle: Toggles the flywheel to the front launch zone RPM preset.
+     * - Square: Toggles the flywheel to the back launch zone RPM preset.
+     */
     override fun onStartButtonPressed() {
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
@@ -41,6 +51,9 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
     }
 
+    /**
+     * Updates telemetry data on each loop iteration to monitor the shooter's performance.
+     */
     override fun onUpdate() {
         ActiveOpMode.telemetry.update()
     }
