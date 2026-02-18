@@ -15,7 +15,9 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 import dev.nextftc.hardware.powerable.SetPower
 
+/** RPM preset for shooting from the back launch zone. */
 const val FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE = 2600.0
+/** RPM preset for shooting from the front launch zone. */
 const val FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE = 3600.0
 
 private const val KICKER_SERVO_DOWN_POSITION = 0.0
@@ -25,9 +27,14 @@ private const val ENCODER_TICKS_PER_REV = 28.0
 
 private const val MAX_MOTOR_RPM = 4000.0
 
+/**
+ * FlywheelShooterSubsystem manages the flywheel motors, kicker servo, and transfer servos.
+ * It uses a PIDF control system to maintain precise flywheel velocity and provides
+ * commands for automated shooting and artifact transfer.
+ */
 object FlywheelShooterSubsystem : Subsystem {
 
-    // TODO: TUNE THESE VALUES???
+    // PID and Feedforward coefficients for flywheel velocity control
     private val flywheelPID = PIDCoefficients(0.008, 0.0, 0.0)
     private val flywheelFF = BasicFeedforwardParameters(0.00055, 0.0, 0.0)
 
@@ -45,6 +52,9 @@ object FlywheelShooterSubsystem : Subsystem {
     private val transferServoTopLeft by lazy { CRServoEx("transfer_servo_top_left") }
     private val transferServoTopRight by lazy { CRServoEx("transfer_servo_top_right") }
 
+    /**
+     * Initializes the flywheel motors and transfer servos, setting initial goals and positions.
+     */
     override fun initialize() {
         super.initialize()
         motors = MotorGroup(
@@ -63,6 +73,10 @@ object FlywheelShooterSubsystem : Subsystem {
         kickerServo.position = KICKER_SERVO_DOWN_POSITION
     }
 
+    /**
+     * Calculates and applies the required power to the flywheel motors based on the PIDF controller.
+     * Updates telemetry with current velocity and status.
+     */
     override fun periodic() {
         val motorPower = flywheelController.calculate(motors.state)
         motors.power = motorPower
@@ -85,6 +99,10 @@ object FlywheelShooterSubsystem : Subsystem {
         ActiveOpMode.telemetry.addData("Kicker Servo Position", kickerServo.position)
     }
 
+    /**
+     * A compound command that starts the transfer mechanism and activates the kicker servo
+     * to launch an artifact into the flywheel.
+     */
     val kickArtifact
         get() = startTransfer.and(InstantCommand {
             if (kickerServo.servo.position == KICKER_SERVO_DOWN_POSITION) {
@@ -92,22 +110,31 @@ object FlywheelShooterSubsystem : Subsystem {
             }
         }.requires(this))
 
+    /**
+     * Command to reset the kicker servo to its resting (down) position.
+     */
     val resetKickerServo
         get() = InstantCommand {
             kickerServo.position = KICKER_SERVO_DOWN_POSITION
         }.requires(this)
 
     /**
-     * Sets the target velocity of the flywheel.
-     * @param rpm The target velocity in ticks per second.
+     * Sets the target velocity of the flywheel in RPM.
+     * @param rpm The target velocity in Revolutions Per Minute.
+     * @return A Command to update the flywheel controller goal.
      */
     fun startSpin(rpm: Double): Command = InstantCommand {
         flywheelController.goal = KineticState(0.0, (rpm / 60.0) * ENCODER_TICKS_PER_REV)
     }
 
+    /**
+     * Command to stop both the flywheel and the transfer servos.
+     */
     val stopSpin get() = startSpin(0.0).and(stopTransfer)
 
-    // TODO: CHANGE MOTOR DIRECTION (-1.0 POWER TO REVERSE) ACCORDING TO LOCATION OF SERVO (RIGHT OR LEFT AND UP OR DOWN)
+    /**
+     * Command to start the transfer mechanism at full power to move artifacts toward the shooter.
+     */
     val startTransfer
         get() = SetPower(transferServoBottomLeft, 1.0).requires(this).and(
             SetPower(transferServoBottomRight, -1.0).requires(this),
@@ -115,6 +142,9 @@ object FlywheelShooterSubsystem : Subsystem {
             SetPower(transferServoTopRight, -1.0).requires(this)
         )
 
+    /**
+     * Command to stop all transfer servos.
+     */
     val stopTransfer
         get() = SetPower(transferServoBottomLeft, 0.0).requires(this).and(
             SetPower(transferServoBottomRight, 0.0).requires(this),
@@ -122,6 +152,9 @@ object FlywheelShooterSubsystem : Subsystem {
             SetPower(transferServoTopRight, 0.0).requires(this)
         )
 
+    /**
+     * A command that stops the transfer if it is currently running.
+     */
     val autoStopTransfer: Command
         get() = if (transferServoBottomLeft.power > 0) {
             stopTransfer
