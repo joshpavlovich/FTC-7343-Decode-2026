@@ -16,7 +16,7 @@ object PathManager {
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
     val frontLaunchZoneStartPose = Pose(57.0, 9.0, 90.deg.inRad)
     val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 113.0.deg.inRad)
-    val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
+    val frontLaunchZoneLeaveParkPose = Pose(36.0, 9.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
     val backIntakeLaunchZoneShootingPose = Pose(36.5, 106.8, 135.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
@@ -28,7 +28,7 @@ object PathManager {
     val frontLaunchZonePrePpgSpikeMarkPose = Pose(42.0, 35.5, 180.deg.inRad)
     val frontLaunchZonePpgSpikeMarkPose = Pose(18.0, 35.5, 180.deg.inRad)
     val frontLaunchZonePrePpgSpikeMarkControlPose = Pose(55.4, 28.8)
-    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
+    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 130.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
     val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
