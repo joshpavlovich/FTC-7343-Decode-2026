@@ -37,6 +37,11 @@ class ManualTeleOp : NextFTCOpMode() {
     private val backLeftMotor = MotorEx("back_left_motor").brakeMode()
     private val backRightMotor = MotorEx("back_right_motor").brakeMode().reversed()
 
+    override fun onInit() {
+        super.onInit()
+        ColorSensorSubsystem.isOpModeTeleOp = true
+    }
+
     /**
      * Sets up the driver-controlled movement and button bindings when the start button is pressed.
      */
@@ -83,6 +88,7 @@ class ManualTeleOp : NextFTCOpMode() {
      */
     override fun onStop() {
         FlywheelShooterSubsystem.stopSpin()
+        ColorSensorSubsystem.isOpModeTeleOp = false
     }
 
     /**

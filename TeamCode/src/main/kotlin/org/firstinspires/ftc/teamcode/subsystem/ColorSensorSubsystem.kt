@@ -13,7 +13,9 @@ import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.autoSto
 /** The timestamp (in seconds) when the end game period starts. */
 const val END_GAME_START_TIME_SECONDS = 100.0
 
-private const val DISTANCE_THRESHOLD_CENTIMETER = 5.0
+private const val DISTANCE_THRESHOLD_CENTIMETER_TELEOP = 5.0
+// TODO: SHOULD THIS VALUE BE GREATER THAT 12.7 CM??? this is value is 5 inches, since the artifact is 5 inches
+private const val DISTANCE_THRESHOLD_CENTIMETER_AUTONOMOUS = 12.7
 
 /**
  * ColorSensorSubsystem manages the color sensor and the Blinkin LED driver.
@@ -32,6 +34,11 @@ object ColorSensorSubsystem : Subsystem {
 
     private val greenRange = 155.0..160.0
     private val purpleRange = 180.0..240.0
+
+    var isOpModeTeleOp: Boolean = false
+
+    private val distanceThresholdCentimeter
+        get() = if (isOpModeTeleOp) DISTANCE_THRESHOLD_CENTIMETER_TELEOP else DISTANCE_THRESHOLD_CENTIMETER_AUTONOMOUS
 
     /**
      * Initializes the color sensor and LED driver from the hardware map.
@@ -52,7 +59,7 @@ object ColorSensorSubsystem : Subsystem {
         val pattern = when {
             ActiveOpMode.opModeIsActive && ActiveOpMode.runtime > END_GAME_START_TIME_SECONDS -> BlinkinPattern.FIRE_MEDIUM
 
-            colorSensor.getDistance(DistanceUnit.CM) <= DISTANCE_THRESHOLD_CENTIMETER -> {
+            colorSensor.getDistance(DistanceUnit.CM) <= distanceThresholdCentimeter -> {
                 val hue = hsv[0]
                 val currentColorStatus: ColorStatus = when (hue) {
                     in greenRange -> ColorStatus.GREEN
@@ -74,6 +81,7 @@ object ColorSensorSubsystem : Subsystem {
             }
 
             else -> {
+                // TODO: ADD isOpModeTeleOp TO CHECK IF WE ARE IN AUTONOMOUS MODE
                 if (colorDetectionTimer.elapsedTimeSeconds > 3.0) {
                     autoStopTransfer()
                 }

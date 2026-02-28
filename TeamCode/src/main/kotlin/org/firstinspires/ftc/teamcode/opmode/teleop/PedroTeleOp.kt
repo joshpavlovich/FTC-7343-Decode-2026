@@ -81,6 +81,8 @@ class PedroTeleOp : NextFTCOpMode() {
 
         PedroComponent.follower.setStartingPose(AutonomousStateManager.startPoseAtEndOfAuto)
 
+        ColorSensorSubsystem.isOpModeTeleOp = true
+
         Drawing.init()
     }
 
@@ -139,6 +141,7 @@ class PedroTeleOp : NextFTCOpMode() {
      */
     override fun onStop() {
         FlywheelShooterSubsystem.stopSpin()
+        ColorSensorSubsystem.isOpModeTeleOp = false
     }
 
     /**
