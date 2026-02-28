@@ -28,7 +28,7 @@ object PathManager {
     val frontLaunchZonePrePpgSpikeMarkPose = Pose(42.0, 35.5, 180.deg.inRad)
     val frontLaunchZonePpgSpikeMarkPose = Pose(18.0, 35.5, 180.deg.inRad)
     val frontLaunchZonePrePpgSpikeMarkControlPose = Pose(55.4, 28.8)
-    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 130.deg.inRad)
+    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
     val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
