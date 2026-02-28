@@ -48,6 +48,8 @@ class RedFrontLaunchZoneToBackWallShootingAuto : NextFTCOpMode() {
         PathManager.buildPaths(PedroComponent.follower)
         PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStrafeStartPose.mirror())
 
+        ColorSensorSubsystem.isOpModeTeleOp = false
+
         Drawing.init()
     }
 

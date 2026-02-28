@@ -46,6 +46,8 @@ class RedFrontLaunchZoneLeaveAuto : NextFTCOpMode() {
         PathManager.buildPaths(PedroComponent.follower)
         PedroComponent.follower.setStartingPose(PathManager.frontLaunchZoneStartPose.mirror())
 
+        ColorSensorSubsystem.isOpModeTeleOp = false
+
         Drawing.init()
     }
 

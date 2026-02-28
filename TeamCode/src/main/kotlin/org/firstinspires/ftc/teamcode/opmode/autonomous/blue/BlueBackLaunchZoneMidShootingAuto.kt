@@ -48,6 +48,8 @@ class BlueBackLaunchZoneMidShootingAuto : NextFTCOpMode() {
         PathManager.buildPaths(PedroComponent.follower)
         PedroComponent.follower.setStartingPose(PathManager.backLaunchZoneStartPose)
 
+        ColorSensorSubsystem.isOpModeTeleOp = false
+
         Drawing.init()
     }
 
