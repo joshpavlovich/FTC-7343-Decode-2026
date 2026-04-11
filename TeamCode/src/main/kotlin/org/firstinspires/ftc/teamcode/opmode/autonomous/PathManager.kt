@@ -7,31 +7,85 @@ import com.pedropathing.geometry.Pose
 import com.pedropathing.paths.PathChain
 import dev.nextftc.core.units.deg
 
+/**
+ * PathManager is responsible for defining all the robot's poses and paths used during autonomous.
+ * It manages both Blue and Red alliance paths by mirroring the base Blue alliance coordinates.
+ */
 object PathManager {
 
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
-    val frontLaunchZoneStartPose = Pose(56.0, 8.0, 90.deg.inRad)
-    val frontLaunchZoneShootingPose = Pose(56.0, 21.258, 112.deg.inRad)
-    val frontLaunchZoneLeaveParkPose = Pose(36.0, 8.0, 90.deg.inRad)
+    val frontLaunchZoneStartPose = Pose(57.0, 9.0, 90.deg.inRad)
+    val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 113.0.deg.inRad)
+    val frontLaunchZoneLeaveParkPose = Pose(36.0, 9.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
-    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 135.deg.inRad)
+    val backIntakeLaunchZoneShootingPose = Pose(36.5, 106.8, 135.deg.inRad)
+    val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
+    val backIntakeLaunchZonePreGppSpikeMarkControlPose = Pose(48.3, 95.79)
+    val backIntakeLaunchZoneGppSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
+    val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(42.0, 59.63, 180.deg.inRad)
+    val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
+    val backIntakeLaunchZonePrePgpSpikeMarkControlPose = Pose(48.3, 64.6)
+    val frontLaunchZonePrePpgSpikeMarkPose = Pose(42.0, 35.5, 180.deg.inRad)
+    val frontLaunchZonePpgSpikeMarkPose = Pose(18.0, 35.5, 180.deg.inRad)
+    val frontLaunchZonePrePpgSpikeMarkControlPose = Pose(55.4, 28.8)
+    val backLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
-    val backLaunchZoneParkPose = Pose(42.0, 72.0, 90.deg.inRad)
+    val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
+    val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
+    val backLaunchZoneWallShootingPose = Pose(50.0, 132.0, 178.deg.inRad)
+    val backLaunchZoneWallParkPose = Pose(60.0, 42.0, 340.deg.inRad)
 
     // TELEOP POSES
+    //Goes to Parking Square
     val endGameBaseZoneParkPose = Pose(105.25, 33.25, 90.deg.inRad)
-    val blueBackShootingPose = Pose(61.977, 82.022, 130.deg.inRad)
-    val blueFrontShootingPose = Pose(92.0, 13.0, 125.deg.inRad)
+    //Goes to back shooting zone close to the wall
+    val blueBackWallShootingPose = Pose(60.0, 128.5, 178.deg.inRad)
+    //Goes to closer shooting zone
+    val blueBackShootingPose = Pose(62.0, 82.0, 130.deg.inRad)
+    //Goes to far shooing zone
+    val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
+    //Goes to gate
+    val blueGoalGatePose = Pose(30.0, 67.0, 270.deg.inRad)
 
     // FIELD LOCATION POSES
-    val blueGoalPose = Pose(13.0, 134.7, 110.0.deg.inRad)
+    val blueGoalPose = Pose(9.0, 134.7, 110.0.deg.inRad)
+
+    /**
+     * Gets the goal pose based on the current alliance.
+     */
+    val goalPose: Pose
+        get() = if (AutonomousStateManager.isRedAlliance) {
+            blueGoalPose.mirror()
+        } else {
+            blueGoalPose
+        }
 
     lateinit var frontLaunchZoneStartToPark: PathChain
     lateinit var frontLaunchZoneStartToFrontLaunchZoneShooting: PathChain
     lateinit var frontLaunchZoneShootingToFrontLaunchZoneLeavePark: PathChain
+    lateinit var frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting: PathChain
+    lateinit var backLaunchZoneWallShootingToBackLaunchZoneWallPark: PathChain
     lateinit var backLaunchZoneStartToBackLaunchZoneShooting: PathChain
+    lateinit var backLaunchZoneStartToBackIntakeLaunchZoneShooting: PathChain
+    lateinit var backIntakeLaunchZoneShootingToGppPreSpikeMark: PathChain
+    lateinit var backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark: PathChain
+    lateinit var backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting: PathChain
+    lateinit var backIntakeLaunchZoneShootingToPgpPreSpikeMark: PathChain
+    lateinit var backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark: PathChain
+    lateinit var backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting: PathChain
+    lateinit var backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
     lateinit var backLaunchZoneShootingToBackLaunchZoneLeavePark: PathChain
+    lateinit var frontLaunchZoneShootingToPpgPreSpikeMark: PathChain
+    lateinit var frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark: PathChain
+    lateinit var frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting: PathChain
+    lateinit var frontLaunchZoneShootingToPgpPreSpikeMark: PathChain
 
+    /**
+     * Builds all path chains based on the current alliance state.
+     * This should be called during the initialization phase of an OpMode.
+     *
+     * @param follower The Pedro Pathing follower instance used to build the paths.
+     */
     fun buildPaths(follower: Follower) {
         if (AutonomousStateManager.isRedAlliance) {
             frontLaunchZoneStartToPark = follower.pathBuilder()
@@ -99,6 +153,98 @@ object PathManager {
                     backLaunchZoneParkPose.mirror().heading
                 )
                 .build()
+
+            backLaunchZoneStartToBackIntakeLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backLaunchZoneStartPose.mirror(), backIntakeLaunchZoneShootingPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backLaunchZoneStartPose.mirror().heading,
+                    backIntakeLaunchZoneShootingPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToGppPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        backIntakeLaunchZoneShootingPose.mirror(),
+                        backIntakeLaunchZonePreGppSpikeMarkControlPose.mirror(),
+                        backIntakeLaunchZonePreGppSpikeMarkPose.mirror()
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.mirror().heading,
+                    backIntakeLaunchZonePreGppSpikeMarkPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePreGppSpikeMarkPose.mirror(), backIntakeLaunchZoneGppSpikeMarkPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePreGppSpikeMarkPose.mirror().heading,
+                    backIntakeLaunchZoneGppSpikeMarkPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZoneGppSpikeMarkPose.mirror(), backIntakeLaunchZoneShootingPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneGppSpikeMarkPose.mirror().heading,
+                    backIntakeLaunchZoneShootingPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToPgpPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        backIntakeLaunchZoneShootingPose.mirror(),
+                        backIntakeLaunchZonePrePgpSpikeMarkControlPose.mirror(),
+                        backIntakeLaunchZonePrePgpSpikeMarkPose.mirror()
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.mirror().heading,
+                    backIntakeLaunchZonePrePgpSpikeMarkPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePrePgpSpikeMarkPose.mirror(), backIntakeLaunchZonePgpSpikeMarkPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePrePgpSpikeMarkPose.mirror().heading,
+                    backIntakeLaunchZonePgpSpikeMarkPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePgpSpikeMarkPose.mirror(), backIntakeLaunchZoneShootingPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePgpSpikeMarkPose.mirror().heading,
+                    backIntakeLaunchZoneShootingPose.mirror().heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZoneShootingPose.mirror(), backLaunchZoneParkPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.mirror().heading,
+                    backLaunchZoneParkPose.mirror().heading
+                )
+                .build()
+
+            frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose.mirror(), backLaunchZoneWallShootingPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneStrafeStartPose.mirror().heading,
+                    backLaunchZoneWallShootingPose.mirror().heading
+                )
+                .build()
+
+            backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
+                .addPath(BezierLine(backLaunchZoneWallShootingPose.mirror(), backLaunchZoneWallParkPose.mirror()))
+                .setLinearHeadingInterpolation(
+                    backLaunchZoneWallShootingPose.mirror().heading,
+                    backLaunchZoneWallParkPose.mirror().heading
+                )
+                .build()
         } else {
             frontLaunchZoneStartToPark = follower.pathBuilder()
                 .addPath(BezierLine(frontLaunchZoneStartPose, frontLaunchZoneLeaveParkPose))
@@ -143,6 +289,137 @@ object PathManager {
                 .setLinearHeadingInterpolation(
                     backLaunchZoneShootingPose.heading,
                     backLaunchZoneParkPose.heading
+                )
+                .build()
+
+            backLaunchZoneStartToBackIntakeLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backLaunchZoneStartPose, backIntakeLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    backLaunchZoneStartPose.heading,
+                    backIntakeLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToGppPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        backIntakeLaunchZoneShootingPose,
+                        backIntakeLaunchZonePreGppSpikeMarkControlPose,
+                        backIntakeLaunchZonePreGppSpikeMarkPose
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.heading,
+                    backIntakeLaunchZonePreGppSpikeMarkPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePreGppSpikeMarkPose, backIntakeLaunchZoneGppSpikeMarkPose))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePreGppSpikeMarkPose.heading,
+                    backIntakeLaunchZoneGppSpikeMarkPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZoneGppSpikeMarkPose, backIntakeLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneGppSpikeMarkPose.heading,
+                    backIntakeLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToPgpPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        backIntakeLaunchZoneShootingPose,
+                        backIntakeLaunchZonePrePgpSpikeMarkControlPose,
+                        backIntakeLaunchZonePrePgpSpikeMarkPose
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.heading,
+                    backIntakeLaunchZonePrePgpSpikeMarkPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePrePgpSpikeMarkPose, backIntakeLaunchZonePgpSpikeMarkPose))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePrePgpSpikeMarkPose.heading,
+                    backIntakeLaunchZonePgpSpikeMarkPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZonePgpSpikeMarkPose, backIntakeLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZonePgpSpikeMarkPose.heading,
+                    backIntakeLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark = follower.pathBuilder()
+                .addPath(BezierLine(backIntakeLaunchZoneShootingPose, backLaunchZoneParkPose))
+                .setLinearHeadingInterpolation(
+                    backIntakeLaunchZoneShootingPose.heading,
+                    backLaunchZoneParkPose.heading
+                )
+                .build()
+
+            frontLaunchZoneShootingToPpgPreSpikeMark = follower.pathBuilder()
+                .addPath(
+                    BezierCurve(
+                        frontLaunchZoneShootingPose,
+                        frontLaunchZonePrePpgSpikeMarkPose,
+                        frontLaunchZonePrePpgSpikeMarkControlPose
+                    )
+                )
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneShootingPose.heading,
+                    frontLaunchZonePrePpgSpikeMarkPose.heading
+                )
+                .build()
+
+            frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePrePpgSpikeMarkPose, frontLaunchZonePpgSpikeMarkPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePrePpgSpikeMarkPose.heading,
+                    backIntakeLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            frontLaunchZonePpgSpikeMarkToFrontLaunchZoneShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePpgSpikeMarkPose, frontLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePpgSpikeMarkPose.heading,
+                    frontLaunchZoneShootingPose.heading
+                )
+                .build()
+
+            frontLaunchZoneShootingToPgpPreSpikeMark = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZonePpgSpikeMarkPose, frontLaunchZoneShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZonePpgSpikeMarkPose.heading,
+                    frontLaunchZoneShootingPose.heading
+                )
+                .build()
+
+
+            frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting = follower.pathBuilder()
+                .addPath(BezierLine(frontLaunchZoneStrafeStartPose, backLaunchZoneWallShootingPose))
+                .setLinearHeadingInterpolation(
+                    frontLaunchZoneStrafeStartPose.heading,
+                    backLaunchZoneWallShootingPose.heading
+                )
+                .build()
+
+            backLaunchZoneWallShootingToBackLaunchZoneWallPark = follower.pathBuilder()
+                .addPath(BezierLine(backLaunchZoneWallShootingPose, backLaunchZoneWallParkPose))
+                .setLinearHeadingInterpolation(
+                    backLaunchZoneWallShootingPose.heading,
+                    backLaunchZoneWallParkPose.heading
                 )
                 .build()
         }
