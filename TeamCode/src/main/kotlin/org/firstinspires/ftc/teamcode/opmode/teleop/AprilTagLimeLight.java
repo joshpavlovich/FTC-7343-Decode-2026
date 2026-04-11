@@ -20,10 +20,10 @@ public class AprilTagLimeLight extends OpMode {
     @Override
     public void init() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(0);
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD);
+                RevHubOrientationOnRobot.UsbFacingDirection.UP);
         imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
     }
 
