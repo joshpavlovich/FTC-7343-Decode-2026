@@ -108,7 +108,7 @@ object FlywheelShooterSubsystem : Subsystem {
             if (kickerServo.servo.position == KICKER_SERVO_DOWN_POSITION) {
                 kickerServo.position = KICKER_SERVO_UP_POSITION
             }
-        }.requires(this))
+        }).requires(this)
 
     /**
      * Command to reset the kicker servo to its resting (down) position.
@@ -136,20 +136,20 @@ object FlywheelShooterSubsystem : Subsystem {
      * Command to start the transfer mechanism at full power to move artifacts toward the shooter.
      */
     val startTransfer
-        get() = SetPower(transferServoBottomLeft, 1.0).requires(this).and(
-            SetPower(transferServoBottomRight, -1.0).requires(this),
-            SetPower(transferServoTopLeft, 1.0).requires(this),
-            SetPower(transferServoTopRight, -1.0).requires(this)
+        get() = SetPower(transferServoBottomLeft, 1.0).and(
+            SetPower(transferServoBottomRight, -1.0),
+            SetPower(transferServoTopLeft, 1.0),
+            SetPower(transferServoTopRight, -1.0)
         )
 
     /**
      * Command to stop all transfer servos.
      */
     val stopTransfer
-        get() = SetPower(transferServoBottomLeft, 0.0).requires(this).and(
-            SetPower(transferServoBottomRight, 0.0).requires(this),
-            SetPower(transferServoTopLeft, 0.0).requires(this),
-            SetPower(transferServoTopRight, 0.0).requires(this)
+        get() = SetPower(transferServoBottomLeft, 0.0).and(
+            SetPower(transferServoBottomRight, 0.0),
+            SetPower(transferServoTopLeft, 0.0),
+            SetPower(transferServoTopRight, 0.0)
         )
 
     /**
