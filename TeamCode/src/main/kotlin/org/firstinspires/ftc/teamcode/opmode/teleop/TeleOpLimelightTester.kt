@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.control.KineticState
+import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
 import dev.nextftc.core.components.BindingsComponent
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.LimelightSubsystem
+import kotlin.math.absoluteValue
 import kotlin.math.atan2
 
 /**
@@ -128,4 +130,40 @@ class TeleOpLimelightTester : NextFTCOpMode() {
             ).schedule()
         }
     }
+
+    private fun autoAimCommand(): Command = InstantCommand({
+        val follower = PedroComponent.follower
+
+        val relativeBearing = getRelativeBearing(
+            robotPose = PedroComponent.follower.pose,
+            goalPose = goalPose
+        )
+        ActiveOpMode.telemetry.addData("relativeBearing offset", relativeBearing)
+        ActiveOpMode.telemetry.addData(
+            "currentHeading + relativeBearing offset",
+            Math.toDegrees(follower.pose.heading + Math.toRadians(relativeBearing))
+        )
+
+        val robotPose = follower.pose
+        val targetAngle = atan2(goalPose.y - robotPose.y, goalPose.x - robotPose.x)
+        ActiveOpMode.telemetry.addData("targetAngle", Math.toDegrees(targetAngle))
+
+        if (LimelightSubsystem.hasTarget) {
+            // Visual Lock
+            val currentHeading = follower.pose.heading
+            ActiveOpMode.telemetry.addData("currentHeading", currentHeading)
+            ActiveOpMode.telemetry.addData(
+                "currentHeading + horizontalOffset",
+                Math.toDegrees(currentHeading + Math.toRadians(LimelightSubsystem.horizontalOffset.absoluteValue))
+            )
+            follower.heading =
+                currentHeading + Math.toRadians(LimelightSubsystem.horizontalOffset.absoluteValue)
+        } else {
+            // Odometry Fallback
+            val robotPose = follower.pose
+            val targetAngle = atan2(goalPose.y - robotPose.y, goalPose.x - robotPose.x)
+            ActiveOpMode.telemetry.addData("targetAngle", targetAngle)
+            follower.heading = targetAngle
+        }
+    }).addRequirements(LimelightSubsystem)
 }
