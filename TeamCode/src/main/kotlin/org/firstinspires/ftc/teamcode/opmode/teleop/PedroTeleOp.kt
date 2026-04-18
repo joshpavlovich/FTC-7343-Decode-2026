@@ -26,12 +26,14 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueFrontSho
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.blueGoalGatePose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.endGameBaseZoneParkPose
 import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
+import org.firstinspires.ftc.teamcode.opmode.teleop.PedroTeleOp.Companion.configurableRpm
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.LimelightSubsystem
 import kotlin.math.atan2
 
 private const val LAYER_ENDGAME = "endgame"
@@ -64,7 +66,12 @@ class PedroTeleOp : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
+            SubsystemComponent(
+                FlywheelShooterSubsystem,
+                ColorSensorSubsystem,
+                IntakeSubsystem,
+                LimelightSubsystem
+            ),
             PedroComponent(Constants::createFollower),
             BulkReadComponent,
             BindingsComponent
@@ -80,7 +87,6 @@ class PedroTeleOp : NextFTCOpMode() {
         super.onInit()
 
         PedroComponent.follower.setStartingPose(AutonomousStateManager.startPoseAtEndOfAuto)
-
         Drawing.init()
     }
 
@@ -100,7 +106,10 @@ class PedroTeleOp : NextFTCOpMode() {
 
         // Kicker controls
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
+            .whenBecomesTrue({
+                turnToGoal()
+                FlywheelShooterSubsystem.kickArtifact.schedule()
+            })
             .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
 
         // Precision mode (slow speed) while holding Left Trigger
@@ -132,6 +141,10 @@ class PedroTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.square.whenTrue {
             followDynamicPath(blueGoalGatePose)
         }
+
+        // Map the Auto-Aim logic
+        // We could use the rightBumper, since it is not being used by the intake yet???
+        Gamepads.gamepad1.circle.whenBecomesTrue { turnToGoal() }
     }
 
     /**
@@ -158,7 +171,7 @@ class PedroTeleOp : NextFTCOpMode() {
 
         Drawing.drawDebug(PedroComponent.follower)
         ActiveOpMode.telemetry.addData("Pedro Follower isBusy", PedroComponent.follower.isBusy)
-        ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
+//        ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("Distance to Goal?", distanceFrom)
         ActiveOpMode.telemetry.addData("Calculated RPM", calculatedRpm)
         ActiveOpMode.telemetry.addData("Target RPM", targetRpm)
@@ -241,7 +254,7 @@ class PedroTeleOp : NextFTCOpMode() {
 
             SequentialGroup(
                 TurnBy(Angle.fromDeg(relativeBearing)),
-                InstantCommand({ PedroComponent.follower.startTeleOpDrive() }).afterTime(1.0)
+                InstantCommand { PedroComponent.follower.startTeleOpDrive() }
             ).schedule()
         }
     }
