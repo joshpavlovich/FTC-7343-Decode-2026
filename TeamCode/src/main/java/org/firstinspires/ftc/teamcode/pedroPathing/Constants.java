@@ -19,6 +19,7 @@ public class Constants {
             .mass(10.43262) // Mass is in kilograms...Remember to convert lbs to kg (Pounds × 0.45359237)!
             .forwardZeroPowerAcceleration(-38.50)
             .lateralZeroPowerAcceleration(-59.78)
+            .turnHeadingErrorThreshold(0.03)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, .025))
             .headingPIDFCoefficients(new PIDFCoefficients(1.0, 0, 0.02, 0.01))
 
