@@ -170,11 +170,13 @@ class PedroTeleOp : NextFTCOpMode() {
         }
 
         Drawing.drawDebug(PedroComponent.follower)
+
         ActiveOpMode.telemetry.addData("Pedro Follower isBusy", PedroComponent.follower.isBusy)
 //        ActiveOpMode.telemetry.addData("Current pose", PedroComponent.follower.pose)
         ActiveOpMode.telemetry.addData("Distance to Goal?", distanceFrom)
         ActiveOpMode.telemetry.addData("Calculated RPM", calculatedRpm)
         ActiveOpMode.telemetry.addData("Target RPM", targetRpm)
+
         ActiveOpMode.telemetry.update()
     }
 
