@@ -48,7 +48,7 @@ object PathManager {
     val blueGoalGatePose = Pose(30.0, 67.0, 270.deg.inRad)
 
     // FIELD LOCATION POSES
-    val blueGoalPose = Pose(9.0, 134.7, 110.0.deg.inRad)
+    val blueGoalPose = Pose(16.3, 131.8, 110.0.deg.inRad)
 
     /**
      * Gets the goal pose based on the current alliance.
