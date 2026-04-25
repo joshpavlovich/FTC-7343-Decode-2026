@@ -25,7 +25,7 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 class ManualTeleOp : NextFTCOpMode() {
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
+//            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
@@ -34,8 +34,8 @@ class ManualTeleOp : NextFTCOpMode() {
     // Drivetrain motors configuration
     private val frontLeftMotor = MotorEx("front_left_motor").brakeMode()
     private val frontRightMotor = MotorEx("front_right_motor").brakeMode().reversed()
-    private val backLeftMotor = MotorEx("back_left_motor").brakeMode()
-    private val backRightMotor = MotorEx("back_right_motor").brakeMode().reversed()
+    private val backLeftMotor = MotorEx("back_left_motor").brakeMode().reversed()
+    private val backRightMotor = MotorEx("back_right_motor").brakeMode()
 
     /**
      * Sets up the driver-controlled movement and button bindings when the start button is pressed.
