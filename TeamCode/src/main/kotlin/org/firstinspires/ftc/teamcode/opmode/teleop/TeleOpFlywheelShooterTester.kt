@@ -40,9 +40,11 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
      * - Square: Toggles the flywheel to the back launch zone RPM preset.
      */
     override fun onStartButtonPressed() {
+        // Gate control: Right Trigger to open, release to close
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
-            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
+            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
+            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
+
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE)
         ).whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)

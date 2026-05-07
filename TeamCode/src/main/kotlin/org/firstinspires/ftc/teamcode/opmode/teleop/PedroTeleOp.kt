@@ -104,14 +104,6 @@ class PedroTeleOp : NextFTCOpMode() {
         )
         driverControlled()
 
-        // Kicker controls
-        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue({
-                turnToGoal()
-                FlywheelShooterSubsystem.kickArtifact.schedule()
-            })
-            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
-
         // Precision mode (slow speed) while holding Left Trigger
         Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue { driverControlled.scalar = 0.1 }

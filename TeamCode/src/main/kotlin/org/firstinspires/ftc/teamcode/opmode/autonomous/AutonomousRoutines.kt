@@ -30,15 +30,6 @@ object AutonomousRoutines {
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
             FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true, 0.6),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Go from the front launch zone to outside the launch zone tape in order to get leave points
             ParallelGroup(
                 FollowPath(PathManager.frontLaunchZoneShootingToFrontLaunchZoneLeavePark, true),
@@ -55,15 +46,6 @@ object AutonomousRoutines {
             // Starting at the front launch zone going to the back launch zone wall shooting and
             // starting flywheel motor leading into shooting
             FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true, 0.7),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Go from the back launch zone wall shooting to outside the launch zone tape in order
             // to get leave points turning to the loading zone
             ParallelGroup(
@@ -81,15 +63,6 @@ object AutonomousRoutines {
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
             FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(5.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(3.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
             ParallelGroup(
@@ -108,16 +81,6 @@ object AutonomousRoutines {
             // starting flywheel motor leading into shooting
             FollowPath(PathManager.backLaunchZoneStartToBackIntakeLaunchZoneShooting, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-//            FlywheelShooterSubsystem.kickArtifact.afterTime(2.0),
-            FlywheelShooterSubsystem.kickArtifact,
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
 
             FollowPath(PathManager.backIntakeLaunchZoneShootingToGppPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
@@ -132,15 +95,6 @@ object AutonomousRoutines {
             ),
 
             WaitUntil { !PedroComponent.follower.isBusy },
-            FlywheelShooterSubsystem.kickArtifact,
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
 
             FollowPath(PathManager.backIntakeLaunchZoneShootingToPgpPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
@@ -155,15 +109,6 @@ object AutonomousRoutines {
             ),
 
             WaitUntil { !PedroComponent.follower.isBusy },
-            FlywheelShooterSubsystem.kickArtifact,
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.5),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
-            // Add a backup kick in case the first kick doesn't work
-            FlywheelShooterSubsystem.kickArtifact.afterTime(1.0),
-            FlywheelShooterSubsystem.resetKickerServo.afterTime(1.0),
 
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp

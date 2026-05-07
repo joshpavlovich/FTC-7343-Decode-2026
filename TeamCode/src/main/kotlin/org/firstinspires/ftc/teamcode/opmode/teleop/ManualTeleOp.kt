@@ -25,7 +25,7 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 class ManualTeleOp : NextFTCOpMode() {
     init {
         addComponents(
-//            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
@@ -59,14 +59,10 @@ class ManualTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
-        // Kicker control: Right Trigger to kick, release to reset
+        // Gate control: Right Trigger to open, release to close
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.kickArtifact)
-            .whenBecomesFalse(FlywheelShooterSubsystem.resetKickerServo)
-
-        // Transfer control: Left Trigger to stop transfer
-        Gamepads.gamepad1.leftTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.stopTransfer)
+            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
+            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
 
         // Shooter RPM presets: Circle for front launch zone, Square for back launch zone
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
