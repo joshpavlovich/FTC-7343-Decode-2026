@@ -17,9 +17,6 @@ const val FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE = 2600.0
 /** RPM preset for shooting from the front launch zone. */
 const val FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE = 3600.0
 
-private const val GATE_SERVO_DOWN_POSITION = 0.0
-private const val GATE_SERVO_UP_POSITION = 0.25
-
 private const val ENCODER_TICKS_PER_REV = 28.0
 
 private const val MAX_MOTOR_RPM = 4000.0
@@ -42,8 +39,6 @@ object FlywheelShooterSubsystem : Subsystem {
 
     private lateinit var motors: MotorGroup
 
-    private val gateServo by lazy { ServoEx("gate_servo") }
-
     /**
      * Initializes the flywheel motors, setting initial goals and positions.
      */
@@ -56,8 +51,6 @@ object FlywheelShooterSubsystem : Subsystem {
 
         // Set the initial goal to 0 velocity.
         flywheelController.goal = KineticState(velocity = 0.0)
-
-        gateServo.position = GATE_SERVO_DOWN_POSITION
     }
 
     /**
@@ -82,28 +75,7 @@ object FlywheelShooterSubsystem : Subsystem {
             )
         } catch (_: Exception) {
         }
-
-        ActiveOpMode.telemetry.addData("Gate Servo Position", gateServo.position)
     }
-
-    /**
-     * A compound command that starts the transfer mechanism and activates the kicker servo
-     * to launch an artifact into the flywheel.
-     */
-    val openGate
-        get() = InstantCommand {
-            if (gateServo.servo.position == GATE_SERVO_DOWN_POSITION) {
-                gateServo.position = GATE_SERVO_UP_POSITION
-            }
-        }.requires(this)
-
-    /**
-     * Command to reset the kicker servo to its resting (down) position.
-     */
-    val closeGate
-        get() = InstantCommand {
-            gateServo.position = GATE_SERVO_DOWN_POSITION
-        }.requires(this)
 
     /**
      * Sets the target velocity of the flywheel in RPM.

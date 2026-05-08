@@ -60,9 +60,9 @@ class ManualTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         // Gate control: Right Trigger to open, release to close
-        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
-            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
+//        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+//            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
+//            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
 
         // Shooter RPM presets: Circle for front launch zone, Square for back launch zone
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(

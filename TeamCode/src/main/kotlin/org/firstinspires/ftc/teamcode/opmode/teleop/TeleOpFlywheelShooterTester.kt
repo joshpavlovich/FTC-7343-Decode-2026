@@ -41,9 +41,9 @@ class TeleOpFlywheelShooterTester : NextFTCOpMode() {
      */
     override fun onStartButtonPressed() {
         // Gate control: Right Trigger to open, release to close
-        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
-            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
+//        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+//            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
+//            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
 
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE)

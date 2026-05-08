@@ -10,18 +10,17 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
-import org.firstinspires.ftc.teamcode.subsystem.KickerSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 
 /**
- * A testing OpMode for the [KickerSubsystem].
- * Provides manual control over the kicker servo to verify its range of motion and responsiveness.
+ * A testing OpMode for the [GateSubsystem].
+ * Provides manual control over the gate motor to verify its range of motion and responsiveness.
  */
-@Disabled
-@TeleOp(name = "TeleOp Kicker Tester")
-class TeleOpKickerTester : NextFTCOpMode() {
+@TeleOp(name = "TeleOp Gate Tester")
+class TeleOpGateTester : NextFTCOpMode() {
     init {
         addComponents(
-            SubsystemComponent(KickerSubsystem),
+            SubsystemComponent(GateSubsystem),
             BulkReadComponent,
             BindingsComponent
         )
@@ -35,7 +34,7 @@ class TeleOpKickerTester : NextFTCOpMode() {
      * When released, the kicker servo resets.
      */
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.rightTrigger.atLeast(0.3) whenBecomesTrue KickerSubsystem.kickArtifact() whenBecomesFalse KickerSubsystem.resetKickerServo()
+        Gamepads.gamepad1.rightTrigger.atLeast(0.3) whenBecomesTrue GateSubsystem.open whenBecomesFalse GateSubsystem.close
     }
 
     /**
