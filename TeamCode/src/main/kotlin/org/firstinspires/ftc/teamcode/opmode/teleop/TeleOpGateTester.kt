@@ -10,6 +10,7 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 
 /**
@@ -41,6 +42,8 @@ class TeleOpGateTester : NextFTCOpMode() {
      * Updates telemetry data on each loop iteration.
      */
     override fun onUpdate() {
+        ActiveOpMode.telemetry.addData("power", GateSubsystem.m_power)
+        ActiveOpMode.telemetry.addData("position", GateSubsystem.m_position)
         ActiveOpMode.telemetry.update()
     }
 }
