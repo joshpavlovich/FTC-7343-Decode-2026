@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
@@ -25,7 +26,12 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 class ManualTeleOp : NextFTCOpMode() {
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
+            SubsystemComponent(
+                ColorSensorSubsystem,
+                FlywheelShooterSubsystem,
+                GateSubsystem,
+                IntakeSubsystem
+            ),
             BulkReadComponent,
             BindingsComponent
         )
@@ -60,14 +66,15 @@ class ManualTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
 
         // Gate control: Right Trigger to open, release to close
-//        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-//            .whenBecomesTrue(FlywheelShooterSubsystem.openGate)
-//            .whenBecomesFalse(FlywheelShooterSubsystem.closeGate)
+        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+            .toggleOnBecomesTrue()
+            .whenBecomesTrue(GateSubsystem.open)
+            .whenBecomesFalse(GateSubsystem.close)
 
         // Shooter RPM presets: Circle for front launch zone, Square for back launch zone
         Gamepads.gamepad1.circle.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE)
-        ) whenBecomesFalse(FlywheelShooterSubsystem.stopSpin)
+        ) whenBecomesFalse (FlywheelShooterSubsystem.stopSpin)
 
         Gamepads.gamepad1.square.toggleOnBecomesTrue().whenBecomesTrue(
             FlywheelShooterSubsystem.startSpin(FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE)

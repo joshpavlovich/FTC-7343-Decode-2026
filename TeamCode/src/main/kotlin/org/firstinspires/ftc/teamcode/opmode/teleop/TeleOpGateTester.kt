@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
@@ -10,8 +9,9 @@ import dev.nextftc.ftc.ActiveOpMode
 import dev.nextftc.ftc.Gamepads
 import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
-import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
+
+private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
 
 /**
  * A testing OpMode for the [GateSubsystem].
@@ -35,15 +35,15 @@ class TeleOpGateTester : NextFTCOpMode() {
      * When released, the kicker servo resets.
      */
     override fun onStartButtonPressed() {
-        Gamepads.gamepad1.rightTrigger.atLeast(0.3) whenBecomesTrue GateSubsystem.open whenBecomesFalse GateSubsystem.close
+        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+            .whenBecomesTrue(GateSubsystem.open)
+            .whenBecomesFalse(GateSubsystem.close)
     }
 
     /**
      * Updates telemetry data on each loop iteration.
      */
     override fun onUpdate() {
-        ActiveOpMode.telemetry.addData("power", GateSubsystem.m_power)
-        ActiveOpMode.telemetry.addData("position", GateSubsystem.m_position)
         ActiveOpMode.telemetry.update()
     }
 }
