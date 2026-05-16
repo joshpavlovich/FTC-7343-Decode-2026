@@ -16,7 +16,7 @@ object IntakeSubsystem : Subsystem {
      * Initializes the intake motor with the specified hardware name, direction, and brake mode.
      */
     override fun initialize() {
-        intakeMotor = MotorEx("intake_motor").reversed().brakeMode()
+        intakeMotor = MotorEx("intake_motor").brakeMode()
     }
 
     /**

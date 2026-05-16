@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
 import dev.nextftc.ftc.ActiveOpMode
@@ -61,14 +62,21 @@ class ManualTeleOp : NextFTCOpMode() {
         )
         driverControlled()
 
-        // Intake controls: Right Bumper for reverse, Left Bumper for forward
-        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
-        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
+        // Intake controls: Right Bumper for forward, Left Bumper for reverse
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
 
         // Gate control: Right Trigger to open, release to close
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .toggleOnBecomesTrue()
-            .whenBecomesTrue(GateSubsystem.open)
+            .whenBecomesTrue(
+                SequentialGroup(
+                    IntakeSubsystem.stop,
+                    GateSubsystem.open,
+                    IntakeSubsystem.forward.afterTime(0.25),
+                    GateSubsystem.close.and(IntakeSubsystem.stop).afterTime(2.0)
+                )
+            )
             .whenBecomesFalse(GateSubsystem.close)
 
         // Shooter RPM presets: Circle for front launch zone, Square for back launch zone
