@@ -32,7 +32,7 @@ class BlueBackLaunchZoneMidShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
