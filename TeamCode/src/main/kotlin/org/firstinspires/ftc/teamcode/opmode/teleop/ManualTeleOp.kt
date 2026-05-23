@@ -10,7 +10,6 @@ import dev.nextftc.ftc.NextFTCOpMode
 import dev.nextftc.ftc.components.BulkReadComponent
 import dev.nextftc.hardware.driving.MecanumDriverControlled
 import dev.nextftc.hardware.impl.MotorEx
-import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
@@ -28,7 +27,6 @@ class ManualTeleOp : NextFTCOpMode() {
     init {
         addComponents(
             SubsystemComponent(
-                ColorSensorSubsystem,
                 FlywheelShooterSubsystem,
                 GateSubsystem,
                 IntakeSubsystem
@@ -68,13 +66,10 @@ class ManualTeleOp : NextFTCOpMode() {
 
         // Gate control: Right Trigger to open, release to close
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
-            .toggleOnBecomesTrue()
             .whenBecomesTrue(
                 SequentialGroup(
-                    IntakeSubsystem.stop,
                     GateSubsystem.open,
-                    IntakeSubsystem.forward.afterTime(0.25),
-                    GateSubsystem.close.and(IntakeSubsystem.stop).afterTime(2.0)
+                    IntakeSubsystem.forward.afterTime(0.25)
                 )
             )
             .whenBecomesFalse(GateSubsystem.close)
