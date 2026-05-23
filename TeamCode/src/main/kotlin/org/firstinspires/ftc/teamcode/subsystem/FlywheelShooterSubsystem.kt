@@ -13,13 +13,13 @@ import dev.nextftc.hardware.impl.MotorEx
 import dev.nextftc.hardware.impl.ServoEx
 
 /** RPM preset for shooting from the back launch zone. */
-const val FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE = 2600.0
+const val FLYWHEEL_MOTOR_RPM_BACK_LAUNCH_ZONE = 2700.0
 /** RPM preset for shooting from the front launch zone. */
 const val FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE = 3600.0
 
 private const val ENCODER_TICKS_PER_REV = 28.0
 
-private const val MAX_MOTOR_RPM = 4000.0
+private const val MAX_MOTOR_RPM = 4900.0
 
 /**
  * FlywheelShooterSubsystem manages the flywheel motors and gate servo.
