@@ -53,7 +53,11 @@ object AutonomousRoutines {
             // Starting at the front launch zone going to the back launch zone wall shooting and
             // starting flywheel motor leading into shooting
             IntakeSubsystem.forward,
-            FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true, 0.7),
+            FollowPath(
+                PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting,
+                true,
+                0.7
+            ),
             WaitUntil { !PedroComponent.follower.isBusy },
             GateSubsystem.open,
             // Go from the back launch zone wall shooting to outside the launch zone tape in order
@@ -96,40 +100,36 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
+            IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackIntakeLaunchZoneShooting, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-
+            GateSubsystem.open,
+            GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.backIntakeLaunchZoneShootingToGppPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            IntakeSubsystem.forward,
             FollowPath(PathManager.backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark, true, 0.5),
-            ParallelGroup(
-                IntakeSubsystem.stop,
-                FollowPath(
-                    PathManager.backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting,
-                    true
-                ),
+            FollowPath(
+                PathManager.backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting,
+                true
             ),
-
             WaitUntil { !PedroComponent.follower.isBusy },
-
+            GateSubsystem.open,
+            GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.backIntakeLaunchZoneShootingToPgpPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            IntakeSubsystem.forward,
             FollowPath(PathManager.backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark, true),
-            ParallelGroup(
-                IntakeSubsystem.stop,
-                FollowPath(
-                    PathManager.backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting,
-                    true
-                ),
+            FollowPath(
+                PathManager.backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting,
+                true
             ),
-
             WaitUntil { !PedroComponent.follower.isBusy },
-
+            GateSubsystem.open,
+            GateSubsystem.close.afterTime(2.0),
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
             ParallelGroup(
+                IntakeSubsystem.stop,
+                GateSubsystem.close,
                 FollowPath(PathManager.backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark, true),
                 FlywheelShooterSubsystem.stopSpin
             )
