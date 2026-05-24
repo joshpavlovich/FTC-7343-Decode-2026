@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 /**
  * Autonomous OpMode for the Blue Alliance that starts in the back launch zone,
@@ -32,7 +34,7 @@ class BlueBackLaunchZoneMidShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, GateSubsystem, IntakeSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
