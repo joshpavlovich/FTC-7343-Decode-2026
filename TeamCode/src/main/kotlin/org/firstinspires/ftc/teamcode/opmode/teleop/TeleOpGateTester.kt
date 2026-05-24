@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.bylazar.telemetry.JoinedTelemetry
 import com.bylazar.telemetry.PanelsTelemetry
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import dev.nextftc.core.components.BindingsComponent
 import dev.nextftc.core.components.SubsystemComponent
@@ -17,6 +18,7 @@ private const val RIGHT_TRIGGER_MINIMUM_VALUE = 0.5
  * A testing OpMode for the [GateSubsystem].
  * Provides manual control over the gate motor to verify its range of motion and responsiveness.
  */
+@Disabled
 @TeleOp(name = "TeleOp Gate Tester")
 class TeleOpGateTester : NextFTCOpMode() {
     init {
