@@ -26,7 +26,6 @@ import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
  * performs shooting, and utilizes the intake to collect and shoot additional artifacts.
  * Currently disabled.
  */
-@Disabled
 @Autonomous(
     name = "\uD83D\uDFE6 Red Back Intake Launch Zone Shoot Auto",
     group = "Red Alliance",
@@ -76,7 +75,7 @@ class RedBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
      */
     override fun onUpdate() {
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
-        val calculatedRpm = calculateRpm(distanceFrom)
+        val calculatedRpm = calculateRpm(distanceFrom + 20.0)
         FlywheelShooterSubsystem.startSpin(calculatedRpm).schedule()
 
         Drawing.drawDebug(PedroComponent.follower)
