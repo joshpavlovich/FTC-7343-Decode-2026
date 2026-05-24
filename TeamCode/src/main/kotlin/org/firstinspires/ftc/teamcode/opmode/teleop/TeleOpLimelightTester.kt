@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmode.teleop
 
 import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import dev.nextftc.control.KineticState
 import dev.nextftc.core.commands.Command
 import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.core.commands.utility.InstantCommand
