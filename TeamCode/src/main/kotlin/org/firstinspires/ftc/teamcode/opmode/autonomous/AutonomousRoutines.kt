@@ -6,12 +6,13 @@ import dev.nextftc.core.commands.groups.SequentialGroup
 import dev.nextftc.extensions.pedro.FollowPath
 import dev.nextftc.extensions.pedro.PedroComponent
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 /**
  * AutonomousRoutines contains a collection of predefined autonomous command groups.
  * These routines define the sequence of actions the robot performs during the autonomous period,
- * such as following paths, shooting artifacts, and intaking from spike marks.
+ * such as following paths, shooting artifacts, and intake from spike marks.
  */
 object AutonomousRoutines {
 
@@ -29,9 +30,15 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the front launch zone shooting and
             // starting flywheel motor leading into shooting
+            // start the intake
+            IntakeSubsystem.forward,
             FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true, 0.6),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            GateSubsystem.open,
             // Go from the front launch zone to outside the launch zone tape in order to get leave points
             ParallelGroup(
+                IntakeSubsystem.stop,
+                GateSubsystem.close,
                 FollowPath(PathManager.frontLaunchZoneShootingToFrontLaunchZoneLeavePark, true),
                 FlywheelShooterSubsystem.stopSpin
             ).afterTime(3.0)
@@ -45,10 +52,15 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the front launch zone going to the back launch zone wall shooting and
             // starting flywheel motor leading into shooting
+            IntakeSubsystem.forward,
             FollowPath(PathManager.frontLaunchZoneStrafeStartToBackLaunchZoneWallShooting, true, 0.7),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            GateSubsystem.open,
             // Go from the back launch zone wall shooting to outside the launch zone tape in order
             // to get leave points turning to the loading zone
             ParallelGroup(
+                IntakeSubsystem.stop,
+                GateSubsystem.close,
                 FollowPath(PathManager.backLaunchZoneWallShootingToBackLaunchZoneWallPark, true),
                 FlywheelShooterSubsystem.stopSpin
             ).afterTime(3.0)
@@ -62,10 +74,15 @@ object AutonomousRoutines {
         get() = SequentialGroup(
             // Starting at the back launch zone going to the back launch zone mid shooting and
             // starting flywheel motor leading into shooting
+            IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            GateSubsystem.open,
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
             ParallelGroup(
+                IntakeSubsystem.stop,
+                GateSubsystem.close,
                 FollowPath(PathManager.backLaunchZoneShootingToBackLaunchZoneLeavePark, true),
                 FlywheelShooterSubsystem.stopSpin
             ).afterTime(3.0)
