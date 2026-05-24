@@ -15,15 +15,15 @@ object PathManager {
 
     // ALL POSES ARE ON BLUE ALLIANCE SIDE OF FIELD
     val frontLaunchZoneStartPose = Pose(57.0, 9.0, 90.deg.inRad)
-    val frontLaunchZoneShootingPose = Pose(58.47, 12.855, 113.0.deg.inRad)
+    val frontLaunchZoneShootingPose = Pose(59.5, 24.0, 120.0.deg.inRad)
     val frontLaunchZoneLeaveParkPose = Pose(36.0, 9.0, 90.deg.inRad)
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
-    val backIntakeLaunchZoneShootingPose = Pose(36.5, 106.8, 135.deg.inRad)
+    val backIntakeLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkControlPose = Pose(48.3, 95.79)
     val backIntakeLaunchZoneGppSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(42.0, 59.63, 180.deg.inRad)
-    val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
+    val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 60.0, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkControlPose = Pose(48.3, 64.6)
     val frontLaunchZonePrePpgSpikeMarkPose = Pose(42.0, 35.5, 180.deg.inRad)
     val frontLaunchZonePpgSpikeMarkPose = Pose(18.0, 35.5, 180.deg.inRad)
