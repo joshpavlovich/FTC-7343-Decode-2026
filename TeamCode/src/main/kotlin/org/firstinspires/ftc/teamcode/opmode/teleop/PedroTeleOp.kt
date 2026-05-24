@@ -29,9 +29,9 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.opmode.teleop.PedroTeleOp.Companion.configurableRpm
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.LimelightSubsystem
 import kotlin.math.atan2
@@ -68,7 +68,7 @@ class PedroTeleOp : NextFTCOpMode() {
         addComponents(
             SubsystemComponent(
                 FlywheelShooterSubsystem,
-                ColorSensorSubsystem,
+                GateSubsystem,
                 IntakeSubsystem,
                 LimelightSubsystem
             ),
@@ -109,9 +109,19 @@ class PedroTeleOp : NextFTCOpMode() {
             .whenBecomesTrue { driverControlled.scalar = 0.1 }
             .whenBecomesFalse { driverControlled.scalar = 1.0 }
 
-        // Intake controls
-        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
-        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
+        // Intake controls: Right Bumper for forward, Left Bumper for reverse
+        Gamepads.gamepad1.rightBumper whenBecomesTrue IntakeSubsystem.forward whenBecomesFalse IntakeSubsystem.stop
+        Gamepads.gamepad1.leftBumper whenBecomesTrue IntakeSubsystem.reverse whenBecomesFalse IntakeSubsystem.stop
+
+        // Gate control: Right Trigger to open, release to close
+        Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
+            .whenBecomesTrue(
+                SequentialGroup(
+                    GateSubsystem.open,
+                    IntakeSubsystem.forward.afterTime(0.25)
+                )
+            )
+            .whenBecomesFalse(GateSubsystem.close)
 
         // Automated path bindings
         Gamepads.gamepad1.ps.whenTrue {
