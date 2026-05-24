@@ -68,8 +68,9 @@ class ManualTeleOp : NextFTCOpMode() {
         Gamepads.gamepad1.rightTrigger.atLeast(RIGHT_TRIGGER_MINIMUM_VALUE)
             .whenBecomesTrue(
                 SequentialGroup(
+                    IntakeSubsystem.stop,
                     GateSubsystem.open,
-                    IntakeSubsystem.forward.afterTime(0.25)
+                    IntakeSubsystem.forward.afterTime(0.5),
                 )
             )
             .whenBecomesFalse(GateSubsystem.close)
