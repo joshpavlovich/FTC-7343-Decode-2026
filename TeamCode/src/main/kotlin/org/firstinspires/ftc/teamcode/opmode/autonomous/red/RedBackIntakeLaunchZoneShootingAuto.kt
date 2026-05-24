@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.opmode.autonomous.PathManager.goalPose
 import org.firstinspires.ftc.teamcode.opmode.teleop.PEDRO_TELE_OP
 import org.firstinspires.ftc.teamcode.panels.Drawing
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
-import org.firstinspires.ftc.teamcode.subsystem.ColorSensorSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.FlywheelShooterSubsystem.calculateRpm
+import org.firstinspires.ftc.teamcode.subsystem.GateSubsystem
 import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 
 /**
@@ -36,7 +36,7 @@ class RedBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
 
     init {
         addComponents(
-            SubsystemComponent(FlywheelShooterSubsystem, ColorSensorSubsystem, IntakeSubsystem),
+            SubsystemComponent(FlywheelShooterSubsystem, GateSubsystem, IntakeSubsystem),
             PedroComponent(Constants::createFollower),
             BulkReadComponent
         )
