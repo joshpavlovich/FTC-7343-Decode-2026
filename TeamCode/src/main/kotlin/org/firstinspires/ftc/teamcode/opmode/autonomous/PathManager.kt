@@ -32,7 +32,7 @@ object PathManager {
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
     val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
     val frontLaunchZoneStrafeStartPose = Pose(57.0, 9.0, 180.deg.inRad)
-    val backLaunchZoneWallShootingPose = Pose(50.0, 132.0, 178.deg.inRad)
+    val backLaunchZoneWallShootingPose = Pose(60.0, 132.0, 178.deg.inRad)
     val backLaunchZoneWallParkPose = Pose(60.0, 42.0, 340.deg.inRad)
 
     // TELEOP POSES
