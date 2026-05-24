@@ -34,7 +34,9 @@ object AutonomousRoutines {
             IntakeSubsystem.forward,
             FollowPath(PathManager.frontLaunchZoneStartToFrontLaunchZoneShooting, true, 0.6),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             // Go from the front launch zone to outside the launch zone tape in order to get leave points
             ParallelGroup(
                 IntakeSubsystem.stop,
@@ -59,7 +61,9 @@ object AutonomousRoutines {
                 0.7
             ),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             // Go from the back launch zone wall shooting to outside the launch zone tape in order
             // to get leave points turning to the loading zone
             ParallelGroup(
@@ -81,7 +85,9 @@ object AutonomousRoutines {
             IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
             ParallelGroup(
@@ -103,7 +109,9 @@ object AutonomousRoutines {
             IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackIntakeLaunchZoneShooting, true),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.backIntakeLaunchZoneShootingToGppPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
@@ -113,7 +121,9 @@ object AutonomousRoutines {
                 true
             ),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.backIntakeLaunchZoneShootingToPgpPreSpikeMark, true),
             WaitUntil { !PedroComponent.follower.isBusy },
@@ -123,7 +133,9 @@ object AutonomousRoutines {
                 true
             ),
             WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
             GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
             GateSubsystem.close.afterTime(2.0),
             // Go from the back launch zone to outside the launch zone tape in order to get
             // leave points and line up robot to open the gate at start of TeleOp
