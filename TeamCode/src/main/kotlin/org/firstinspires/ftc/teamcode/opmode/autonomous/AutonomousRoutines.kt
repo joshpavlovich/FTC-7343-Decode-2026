@@ -118,10 +118,10 @@ object AutonomousRoutines {
             FollowPath(PathManager.backIntakeLaunchZoneGppPreSpikeMarkToGppSpikeMark, true, 0.5),
             FollowPath(
                 PathManager.backIntakeLaunchZoneGppSpikeMarkToBackLaunchZoneShooting,
-                true
-            ),
+                true, 0.5
+            ).afterTime(0.5),
             WaitUntil { !PedroComponent.follower.isBusy },
-            IntakeSubsystem.stop,
+            IntakeSubsystem.stop.afterTime(1.0),
             GateSubsystem.open,
             IntakeSubsystem.forward.afterTime(0.5),
             GateSubsystem.close.afterTime(2.0),
@@ -130,10 +130,10 @@ object AutonomousRoutines {
             FollowPath(PathManager.backIntakeLaunchZonePgpPreSpikeMarkToPgpSpikeMark, true),
             FollowPath(
                 PathManager.backIntakeLaunchZonePgpSpikeMarkToBackLaunchZoneShooting,
-                true
-            ),
+                true, 0.5
+            ).afterTime(0.5),
             WaitUntil { !PedroComponent.follower.isBusy },
-            IntakeSubsystem.stop,
+            IntakeSubsystem.stop.afterTime(1.0),
             GateSubsystem.open,
             IntakeSubsystem.forward.afterTime(0.5),
             GateSubsystem.close.afterTime(2.0),
