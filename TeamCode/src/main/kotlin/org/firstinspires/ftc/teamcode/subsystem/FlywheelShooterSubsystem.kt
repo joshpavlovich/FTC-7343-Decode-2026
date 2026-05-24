@@ -19,7 +19,7 @@ const val FLYWHEEL_MOTOR_RPM_FRONT_LAUNCH_ZONE = 3600.0
 
 private const val ENCODER_TICKS_PER_REV = 28.0
 
-private const val MAX_MOTOR_RPM = 4900.0
+private const val MAX_MOTOR_RPM = 6000.0
 
 /**
  * FlywheelShooterSubsystem manages the flywheel motors and gate servo.
@@ -130,9 +130,10 @@ object FlywheelShooterSubsystem : Subsystem {
         // If all shots are low: Add +50 to your "c" value.
         // If close shots are good, but far shots are low: Increase your "b" value slightly (e.g., from 14.28 to 14.50).
         //
-        val airAndGravityCurve = -0.0148529 // The "a" Value: The "Air & Gravity Curve" (Curvature)
-        val linearGrowth = 14.282 // The "b" Value: The "Linear Growth" (Slope)
-        val baselineRpm = 1714.48071 // The "c" Value: The "Baseline Power" (Y-Intercept)
+
+        val airAndGravityCurve = 0.0663 // The "a" Value: The "Air & Gravity Curve" (Curvature)
+        val linearGrowth = 0.887 // The "b" Value: The "Linear Growth" (Slope)
+        val baselineRpm = 2295.5 // The "c" Value: The "Baseline Power" (Y-Intercept)
 
         val targetRpm =
             (airAndGravityCurve * (distanceInches * distanceInches)) + (linearGrowth * distanceInches) + baselineRpm
