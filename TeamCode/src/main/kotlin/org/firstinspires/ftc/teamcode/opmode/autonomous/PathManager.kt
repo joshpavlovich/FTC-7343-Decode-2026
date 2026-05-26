@@ -21,7 +21,7 @@ object PathManager {
     val backIntakeLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkControlPose = Pose(48.3, 95.79)
-    val backIntakeLaunchZoneGppSpikeMarkPose = Pose(17.37, 83.90, 180.deg.inRad)
+    val backIntakeLaunchZoneGppSpikeMarkPose = Pose(19.37, 83.90, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(42.0, 59.63, 180.deg.inRad)
     val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 60.0, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkControlPose = Pose(48.3, 64.6)
