@@ -80,7 +80,7 @@ object AutonomousRoutines {
      */
     val backLaunchMidShootingAutoRoutine
         get() = SequentialGroup(
-            // Starting at the back launch zone going to the back launch zone mid shooting and
+            // Starting at the back launch zone going to the back launch zone mid-shooting and
             // starting flywheel motor leading into shooting
             IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackLaunchZoneShooting, true),
@@ -104,7 +104,7 @@ object AutonomousRoutines {
      */
     val backLaunchIntakeShootingAutoRoutine
         get() = SequentialGroup(
-            // Starting at the back launch zone going to the back launch zone mid shooting and
+            // Starting at the back launch zone going to the back launch zone mid-shooting and
             // starting flywheel motor leading into shooting
             IntakeSubsystem.forward,
             FollowPath(PathManager.backLaunchZoneStartToBackIntakeLaunchZoneShooting, true),
@@ -143,6 +143,59 @@ object AutonomousRoutines {
                 IntakeSubsystem.stop,
                 GateSubsystem.close,
                 FollowPath(PathManager.backIntakeLaunchZoneShootingToBackLaunchZoneLeavePark, true),
+                FlywheelShooterSubsystem.stopSpin
+            )
+        )
+
+    /**
+     * A complex routine that starts at the front launch zone, shoots at the back, then proceeds to
+     * intake artifacts from the PPG spike marks, the loading zone and shoots them, before parking.
+     */
+    val frontLaunchIntakeShootingAutoRoutine
+        get() = SequentialGroup(
+            // Starting at the front launch zone going to the back launch zone to shoot and
+            // starting flywheel motor leading into shooting
+            IntakeSubsystem.forward,
+            FollowPath(PathManager.frontLaunchZoneStartToToBackLaunchZoneShooting, true),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop,
+            GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
+            GateSubsystem.close.afterTime(2.0),
+            FollowPath(PathManager.frontLaunchZoneShootingToPpgPreSpikeMark, true),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FollowPath(PathManager.frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark, true, 0.5),
+            FollowPath(
+                PathManager.frontLaunchZonePpgSpikeMarkToToBackLaunchZoneShooting,
+                true, 0.6
+            ).afterTime(0.5),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop.afterTime(1.0),
+            GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
+            GateSubsystem.close.afterTime(2.0),
+            FollowPath(PathManager.frontLaunchZoneShootingToPreLoadingZoneFirstPose, true),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FollowPath(PathManager.frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose, true, 0.5),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FollowPath(PathManager.frontLaunchZoneLoadingZoneFirstPoseToLoadingZonePreSecondPose, true, 0.5),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            FollowPath(PathManager.frontLaunchZoneLoadingZonePreSecondPoseToLoadingZoneSecondPose, true, 0.5),
+            FollowPath(
+                PathManager.frontLaunchZoneLoadingZoneToBackLaunchZoneShooting,
+                true, 0.6
+            ).afterTime(0.5),
+            WaitUntil { !PedroComponent.follower.isBusy },
+            IntakeSubsystem.stop.afterTime(1.0),
+            GateSubsystem.open,
+            IntakeSubsystem.forward.afterTime(0.5),
+            GateSubsystem.close.afterTime(2.0),
+            // Go from the back launch zone to outside the launch zone tape in order to get
+            // leave points and line up robot to open the gate at start of TeleOp
+            ParallelGroup(
+                IntakeSubsystem.stop,
+                GateSubsystem.close,
+                FollowPath(PathManager.frontLaunchZoneShootingToBackLaunchZoneLeavePark, true),
                 FlywheelShooterSubsystem.stopSpin
             )
         )
