@@ -24,7 +24,6 @@ import org.firstinspires.ftc.teamcode.subsystem.IntakeSubsystem
 /**
  * Autonomous OpMode for the Red Alliance that starts in the back launch zone,
  * performs shooting, and utilizes the intake to collect and shoot additional artifacts.
- * Currently disabled.
  */
 @Autonomous(
     name = "\uD83D\uDFE6 Red Back Intake Launch Zone Shoot Auto",
