@@ -48,7 +48,7 @@ class RedBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
      */
     override fun onInit() {
         PathManager.buildPaths(PedroComponent.follower)
-        PedroComponent.follower.setStartingPose(PathManager.backLaunchZoneStartPose)
+        PedroComponent.follower.setStartingPose(PathManager.backLaunchZoneStartPose.mirror())
 
         Drawing.init()
     }
@@ -74,7 +74,7 @@ class RedBackIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
      */
     override fun onUpdate() {
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
-        val calculatedRpm = calculateRpm(distanceFrom + 20.0)
+        val calculatedRpm = calculateRpm(distanceFrom + 10.0)
         FlywheelShooterSubsystem.startSpin(calculatedRpm).schedule()
 
         Drawing.drawDebug(PedroComponent.follower)
