@@ -176,7 +176,7 @@ object AutonomousRoutines {
             GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.frontLaunchZoneShootingToPreLoadingZoneFirstPose, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            FollowPath(PathManager.frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose, true, 0.5),
+            FollowPath(PathManager.frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose, true, 0.7),
             WaitUntil { !PedroComponent.follower.isBusy },
 //            FollowPath(PathManager.frontLaunchZoneLoadingZoneFirstPoseToLoadingZonePreSecondPose, true, 0.5),
 //            WaitUntil { !PedroComponent.follower.isBusy },
