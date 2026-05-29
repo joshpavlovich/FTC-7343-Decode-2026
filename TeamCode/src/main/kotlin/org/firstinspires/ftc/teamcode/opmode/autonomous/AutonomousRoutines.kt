@@ -167,7 +167,7 @@ object AutonomousRoutines {
             FollowPath(PathManager.frontLaunchZonePpgPreSpikeMarkToPpgSpikeMark, true, 0.7),
             FollowPath(
                 PathManager.frontLaunchZonePpgSpikeMarkToToBackLaunchZoneShooting,
-                true, 0.7
+                true, 0.8
             ).afterTime(0.5),
             WaitUntil { !PedroComponent.follower.isBusy },
             IntakeSubsystem.stop.afterTime(1.0),
@@ -176,14 +176,14 @@ object AutonomousRoutines {
             GateSubsystem.close.afterTime(2.0),
             FollowPath(PathManager.frontLaunchZoneShootingToPreLoadingZoneFirstPose, true),
             WaitUntil { !PedroComponent.follower.isBusy },
-            FollowPath(PathManager.frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose, true, 0.7),
+            FollowPath(PathManager.frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose, true, 0.8),
             WaitUntil { !PedroComponent.follower.isBusy },
 //            FollowPath(PathManager.frontLaunchZoneLoadingZoneFirstPoseToLoadingZonePreSecondPose, true, 0.5),
 //            WaitUntil { !PedroComponent.follower.isBusy },
 //            FollowPath(PathManager.frontLaunchZoneLoadingZonePreSecondPoseToLoadingZoneSecondPose, true, 0.5),
             FollowPath(
                 PathManager.frontLaunchZoneLoadingZoneToBackLaunchZoneShooting,
-                true, 0.7
+                true, 0.8
             ).afterTime(0.5),
             WaitUntil { !PedroComponent.follower.isBusy },
             IntakeSubsystem.stop.afterTime(1.0),
