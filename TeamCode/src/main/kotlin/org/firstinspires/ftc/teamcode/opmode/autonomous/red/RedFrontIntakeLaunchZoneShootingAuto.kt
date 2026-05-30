@@ -73,7 +73,7 @@ class RedFrontIntakeLaunchZoneShootingAuto : NextFTCOpMode() {
      */
     override fun onUpdate() {
         val distanceFrom = PedroComponent.follower.pose.distanceFrom(goalPose)
-        val calculatedRpm = calculateRpm(distanceFrom + 10.0)
+        val calculatedRpm = calculateRpm(distanceFrom)
         FlywheelShooterSubsystem.startSpin(calculatedRpm).schedule()
 
         Drawing.drawDebug(PedroComponent.follower)
