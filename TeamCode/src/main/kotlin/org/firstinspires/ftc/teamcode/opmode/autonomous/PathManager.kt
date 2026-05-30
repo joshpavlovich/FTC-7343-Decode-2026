@@ -17,14 +17,14 @@ object PathManager {
     val backLaunchZoneStartPose = Pose(33.5, 134.5, 90.deg.inRad)
     val backLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backLaunchZoneShootingControlPointPose = Pose(65.0, 122.0)
-    val backLaunchZoneParkPose = Pose(42.0, 72.0, 270.deg.inRad)
+    val backLaunchZoneParkPose = Pose(15.5, 56.5, 128.deg.inRad)
 
     val backIntakeLaunchZoneShootingPose = Pose(56.0, 86.0, 132.5.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkPose = Pose(42.0, 84.21, 180.deg.inRad)
     val backIntakeLaunchZonePreGppSpikeMarkControlPose = Pose(48.3, 95.79)
     val backIntakeLaunchZoneGppSpikeMarkPose = Pose(19.37, 83.90, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkPose = Pose(42.0, 59.63, 180.deg.inRad)
-    val backIntakeLaunchZonePgpSpikeMarkPose = Pose(17.37, 60.0, 180.deg.inRad)
+    val backIntakeLaunchZonePgpSpikeMarkPose = Pose(15.5, 60.0, 180.deg.inRad)
     val backIntakeLaunchZonePrePgpSpikeMarkControlPose = Pose(48.3, 64.6)
 
     val backLaunchZoneWallShootingPose = Pose(60.0, 132.0, 178.deg.inRad)
@@ -45,7 +45,7 @@ object PathManager {
     val frontIntakeLaunchZonePreLoadingZoneFirstControlPose = Pose(55.0, 7.5)
     val frontIntakeLaunchZoneLoadingZoneFirstPose = Pose(9.0, 11.5, 180.deg.inRad)
     val frontIntakeLaunchZonePreLoadingZoneSecondPose = Pose(20.0, 9.0, 180.deg.inRad)
-    val frontIntakeLaunchZoneLoadingZoneSecondPose = Pose(9.0, 9.0, 180.deg.inRad)
+    val frontIntakeLaunchZoneLoadingZoneSecondPose = Pose(10.0, 10.0, 180.deg.inRad)
     val frontIntakeLaunchZoneLoadingZoneControlToShootingPose = Pose(58.25, 12.75)
     val frontIntakeLaunchZoneLeaveParkPose = Pose(58.0, 60.5, 180.0.deg.inRad)
 
@@ -63,7 +63,7 @@ object PathManager {
     val blueFrontShootingPose = Pose(81.0, 21.0, 123.deg.inRad)
 
     //Goes to gate
-    val blueGoalGatePose = Pose(30.0, 67.0, 270.deg.inRad)
+    val blueGoalGatePose = Pose(15.5, 56.5, 128.deg.inRad)
 
     // FIELD LOCATION POSES
     val blueGoalPose = Pose(16.3, 131.8, 110.0.deg.inRad)
@@ -318,7 +318,7 @@ object PathManager {
                 )
                 .setLinearHeadingInterpolation(
                     frontIntakeLaunchZonePrePpgSpikeMarkPose.mirror().heading,
-                    backIntakeLaunchZoneShootingPose.mirror().heading
+                    frontIntakeLaunchZonePpgSpikeMarkPose.mirror().heading
                 )
                 .build()
 
@@ -341,20 +341,20 @@ object PathManager {
                     BezierCurve(
                         frontIntakeLaunchZoneBackShootingPose.mirror(),
                         frontIntakeLaunchZonePreLoadingZoneFirstControlPose.mirror(),
-                        frontIntakeLaunchZonePreLoadingZoneFirstPose.mirror()
+                        frontIntakeLaunchZonePreLoadingZoneSecondPose.mirror()
                     )
                 )
                 .setLinearHeadingInterpolation(
                     frontLaunchZoneShootingPose.mirror().heading,
-                    frontIntakeLaunchZonePreLoadingZoneFirstPose.mirror().heading
+                    frontIntakeLaunchZonePreLoadingZoneSecondPose.mirror().heading
                 )
                 .build()
 
             frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose = follower.pathBuilder()
-                .addPath(BezierLine(frontIntakeLaunchZonePreLoadingZoneFirstPose.mirror(), frontIntakeLaunchZoneLoadingZoneFirstPose.mirror()))
+                .addPath(BezierLine(frontIntakeLaunchZonePreLoadingZoneSecondPose.mirror(), frontIntakeLaunchZoneLoadingZoneSecondPose.mirror()))
                 .setLinearHeadingInterpolation(
-                    frontIntakeLaunchZonePreLoadingZoneFirstPose.mirror().heading,
-                    frontIntakeLaunchZoneLoadingZoneFirstPose.mirror().heading
+                    frontIntakeLaunchZonePreLoadingZoneSecondPose.mirror().heading,
+                    frontIntakeLaunchZoneLoadingZoneSecondPose.mirror().heading
                 )
                 .build()
 
@@ -595,7 +595,7 @@ object PathManager {
                 )
                 .setLinearHeadingInterpolation(
                     frontIntakeLaunchZonePrePpgSpikeMarkPose.heading,
-                    backIntakeLaunchZoneShootingPose.heading
+                    frontIntakeLaunchZonePpgSpikeMarkPose.heading
                 )
                 .build()
 
@@ -618,20 +618,20 @@ object PathManager {
                     BezierCurve(
                         frontIntakeLaunchZoneBackShootingPose,
                         frontIntakeLaunchZonePreLoadingZoneFirstControlPose,
-                        frontIntakeLaunchZonePreLoadingZoneFirstPose
+                        frontIntakeLaunchZonePreLoadingZoneSecondPose
                     )
                 )
                 .setLinearHeadingInterpolation(
                     frontLaunchZoneShootingPose.heading,
-                    frontIntakeLaunchZonePreLoadingZoneFirstPose.heading
+                    frontIntakeLaunchZonePreLoadingZoneSecondPose.heading
                 )
                 .build()
 
             frontLaunchZonePreLoadingZoneFirstPoseToLoadingZoneFirstPose = follower.pathBuilder()
-                .addPath(BezierLine(frontIntakeLaunchZonePreLoadingZoneFirstPose, frontIntakeLaunchZoneLoadingZoneFirstPose))
+                .addPath(BezierLine(frontIntakeLaunchZonePreLoadingZoneSecondPose, frontIntakeLaunchZoneLoadingZoneSecondPose))
                 .setLinearHeadingInterpolation(
-                    frontIntakeLaunchZonePreLoadingZoneFirstPose.heading,
-                    frontIntakeLaunchZoneLoadingZoneFirstPose.heading
+                    frontIntakeLaunchZonePreLoadingZoneSecondPose.heading,
+                    frontIntakeLaunchZoneLoadingZoneSecondPose.heading
                 )
                 .build()
 
